@@ -11,40 +11,45 @@
 #pragma once
 #include <iostream>
 #include <cstddef>
-using namespace std; 
+using namespace std;
+
+#ifndef cll_H_
+#define cll_H_
+
+#endif
 
 
 
 template <class t> class cll {
 
 private:
-	
+
 	struct Node {
-		Node* next; 
-		T val; 
+		Node* next;
+		int val;
 		//int key; 
-		bool marked; 
-		bool end; 
-		Node(Node* nnext, T vval, bool mmarked, bool iend) {
-			this->next = nnext; 
-			this->val = vval; 
-			this->key = kkey; 
+		bool marked;
+		bool end;
+		Node(Node* nnext, int vval, bool mmarked, bool iend) {
+			this->next = nnext;
+			this->val = vval;
+			//this->key = kkey;
 			this->marked = mmarked;
-			this->end = iend; 
+			this->end = iend;
 
 
 		}
 
 
 	};
-	Node* head; 
+	Node* head;
 
 
 
 public:
 
 	cll() {
-		head = NULL; 
+		head = NULL;
 	}
 
 	~cll() {
@@ -60,25 +65,25 @@ public:
 		}
 	}
 
-	
-//Node(Node* nnext, T vval, bool mmarked, bool iend) {
 
-	void insert(T vall) {
+	//Node(Node* nnext, T vval, bool mmarked, bool iend) {
 
-		Node* temp = head; 
+	void insert(int vall) {
+
+		Node* temp = head;
 		//Empty list 
 		if (head == NULL) {
-			head = new Node(NULL, vall , false, true);
+			head = new Node(NULL, vall, false, true);
 		}
-		
+
 		//One element
 		else if (head->next == NULL) {
-			head->end = false; 
-			Node* temp = new Node(NULL, vall, false, true)
-			head->next = temp; 
-			
+			head->end = false;
+			Node* temp = new Node(NULL, vall, false, true);
+				head->next = temp;
+
 		}
-		
+
 		//Arbitrary Number of elements
 		else {
 
@@ -90,18 +95,18 @@ public:
 
 			}
 			temp->marked = false;
-			Node* curr = new Node(NULL, vall , false, true);
-			temp->next = curr; 
+			Node* curr = new Node(NULL, vall, false, true);
+			temp->next = curr;
 		}
 
 	}
 
-	void mark(T vall, bool mmar) {
+	void mark(int vall, bool mmar) {
 		if (head == NULL) {
 			cout << "List is empty";
-			break; 
+			break;
 		}
-		Node* temp = head; 
+		Node* temp = head;
 		while (temp->next != NULL) {
 			if (temp->val == vall && temp->marked == mmar) {
 				cout << "Already IN this state";
@@ -109,11 +114,11 @@ public:
 
 			}
 			else if (temp->val == vall && temp->marked != mmar) {
-				temp->marked = mmar; 
+				temp->marked = mmar;
 
 			}
 			else {
-				temp = temp->next; 
+				temp = temp->next;
 
 			}
 
@@ -128,39 +133,39 @@ public:
 		//Only one element
 		else if (head->next == NULL) {
 			delete(head);
-			head = NULL; 
+			head = NULL;
 		}
 		else {
-			Node* temp = head -> next; 
+			Node* temp = head->next;
 			delete(head);
-			head = temp; 
+			head = temp;
 		}
 
-		
+
 
 	}
 
-	bool search(T val) {
-		Node* temp = head; 
+	bool search(int value) {
+		Node* temp = head;
 		//bool marked[1] = { false };
 		if (head == NULL) {
-			return false; 
+			return false;
 		}
-		while (temp -> next!= NULL) {
+		while (temp->next != NULL) {
 			if (temp->val == value && temp->marked == false) {
-				return true; 
+				return true;
 			}
-			else if (temp->val == vale && temp->marked == true) {
+			else if (temp->val == value && temp->marked == true) {
 				return false;
 			}
 			else {
-				temp = temp->next; 
+				temp = temp->next;
 
 
 			}
 
 		}
-		return false; 
+		return false;
 	}
 
 
