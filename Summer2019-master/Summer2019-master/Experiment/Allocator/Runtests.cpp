@@ -1,4 +1,4 @@
-#include "LinkedList.h"
+#include "linkedList.h"
 #include <iostream>
 
 using namespace std; 
