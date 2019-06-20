@@ -1,46 +1,48 @@
 #pragma once
 #include <iostream>
+#include <stdlib.h>
+
 
 using namespace std; 
 
 
-class salloc {
+class salloc{
+
 private:
+	
+	int blocks; 
+	size_t size; 
+	//free List
+	//allocated List 
 
-
-	struct Node() {
-
-
-
-		Node()
-
-	};
-
-	Node* head; 
 
 
 public:
 
 
 	salloc() {
-
+		blocks = 0; 
+		size = 0; 
 
 	}
 
 	~salloc() {
-
+		
 
 	}
 
 	void* createNode(size_t s)
 	{
 
-
+		void* n = malloc(s);
+		return n; 
 
 	}
-	void freeNode() {
 
+	void freeNode(void* Node) {
 
+		free(Node);
+		cout << "Node Freed";
 
 	}
 
@@ -49,8 +51,10 @@ public:
 
 	}
 
-	void* Createptr() {
-
+	void* Createptr(size_t size) {
+		
+		//Take in a size and return the pointer to the storage in memory 
+		return malloc(size);
 
 
 	}
