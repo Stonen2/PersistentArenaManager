@@ -1,9 +1,6 @@
 //Created by Nick Stone and Thomas Maranzatto 
-
 //Concurrent single linked link list. 
-
 //Assuming all values are unique
-
 //Created on 6/17/2019
 
 
@@ -75,7 +72,7 @@ public:
 	//Node(Node* nnext, T vval, bool mmarked, bool iend) {
 
 	void insert(int vall) {
-
+		Node sa(NULL, vall, true);
 		Node* temp = head;
 		//Empty list 
 		if (head == NULL) {
@@ -85,9 +82,11 @@ public:
 			///
 			///
 			///
+			
 			//
-			head = new Node(NULL, vall,  true);
-		
+			head= static_cast <Node*>(s.createNode(sizeof(s)));
+			head = &sa;
+			//sa = head; 
 		
 		}
 
@@ -111,7 +110,7 @@ public:
 
 			//Finding a way to cast next
 
-			temp = Node l(NULL, vall, true);
+			temp = &sa;
 			
 			
 			
@@ -138,7 +137,10 @@ public:
 			//
 			//
 			//
-			Node* curr = new Node(NULL, vall, true);
+
+			Node* curr = static_cast <Node*>(s.createNode(sizeof(struct Node(NULL, vall, true))));
+
+			curr = &sa;
 			temp->next = curr;
 		}
 
