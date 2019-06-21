@@ -57,11 +57,6 @@ public:
 
 	}
 
-	void SetHeap() {
-
-
-	}
-
 	void* Createptr(size_t size) {
 		
 		//Take in a size and return the pointer to the storage in memory 
