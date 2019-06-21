@@ -47,6 +47,7 @@ private:
 
 
 public:
+	
 
 	linkedList() {
 		head = NULL;
@@ -80,12 +81,15 @@ public:
 		//cout << "Hello";
 		//cout << head << "THIS IS THE VALUE OF HEAD"; 
 		//cout << endl; 
-		Node* temp = head;
+		Node* temp = NULL;
+		temp = head; 
 		//cout << head; 
 		//Empty list 
 		
 		if (head == NULL) {
+		
 			head= static_cast <Node*>(s.createNode(sizeof(sa)));
+			
 			//cout << &head; 
 			//cout << endl; 
 			//cout << &sa; 
@@ -95,6 +99,7 @@ public:
 			//sa = head; 
 			cout << head->val << "HEAD VALUE"; 
 			cout << endl; 
+			
 			//cout << sa.val;
 			//cout << endl; 
 			//cout << endl;
@@ -108,9 +113,10 @@ public:
 		//One element
 		else if (head->next == NULL) {
 			head->end = false;
-			temp = static_cast <Node*>(s.createNode(sizeof(struct Node(NULL,vall,true))));
+	
+			Node * t = static_cast <Node*>(s.createNode(sizeof(sa)));
 			//Node* t = &temp;
-
+			//t = temp; 
 
 			//Points the memory address to the Location of the given Node 
 			//THE only error is because Void * != Node 
@@ -121,6 +127,7 @@ public:
 			//Node l(NULL,vall,true); 
 			//Node* temp = new Node(NULL, vall,  true);
 			head->next = temp;
+			cout << head->val; 
 			cout << endl; 
 			cout << head->val; 
 		}
@@ -138,7 +145,8 @@ public:
 			//
 			//
 			//
-			Node* curr = static_cast <Node*>(s.createNode(sizeof(struct Node(NULL, vall, true))));
+			//cout << head->val; 
+			Node* curr = static_cast <Node*>(s.createNode(sizeof(sa)));
 			curr = &sa;
 			temp->next = curr;
 		}
@@ -192,7 +200,11 @@ public:
 	}
 	void print() {
 		Node* temp = head; 
-		cout << head->val; 
+		//cout << head->val;
+
+
+		cout << endl; 
+	
 		while (temp != NULL) {
 			cout << temp->val;
 			cout << endl; 

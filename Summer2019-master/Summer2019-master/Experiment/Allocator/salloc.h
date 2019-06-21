@@ -44,9 +44,9 @@ public:
 
 	void* createNode(size_t s)
 	{
-
-		void* n = malloc(s);
-		return n; 
+		return malloc(s);
+		//void* n = malloc(s);
+		//return n; 
 
 	}
 
