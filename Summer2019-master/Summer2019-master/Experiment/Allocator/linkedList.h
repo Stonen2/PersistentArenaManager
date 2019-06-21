@@ -67,39 +67,43 @@ public:
 			s.freeNode(follow);
 		}
 	}
-
-
+	
 	//Node(Node* nnext, T vval, bool mmarked, bool iend) {
-
 	void insert(int vall) {
 		Node sa(NULL, vall, true);
+		//cout << sa.val;
+		
+		//cout << endl; 
+		//cout << &sa;
+		//cout << sa->val;
+		//cout << vall; 
+		//cout << "Hello";
+		
 		Node* temp = head;
 		//Empty list 
 		if (head == NULL) {
-			
-			//
-			///
-			///
-			///
-			///
-			
-			//
-			head= static_cast <Node*>(s.createNode(sizeof(s)));
+			head= static_cast <Node*>(s.createNode(sizeof(sa)));
+			//cout << &head; 
+			//cout << endl; 
+			//cout << &sa; 
+			//cout << endl; 
+
 			head = &sa;
+			//sa = head; 
+			cout << head->val << "HEAD VALUE"; 
+			cout << endl; 
+			//cout << sa.val;
+			//cout << endl; 
+			//cout << endl;
+			//cout << head;
+			//cout << endl; 
+			//cout << &sa;
 			//sa = head; 
 		
 		}
 
 		//One element
 		else if (head->next == NULL) {
-			//
-			//
-			//
-			//
-			//
-			//
-			//
-
 			head->end = false;
 			Node * temp = static_cast <Node*>(s.createNode(sizeof(struct Node(NULL,vall,true))));
 			//Node* t = &temp;
@@ -111,20 +115,12 @@ public:
 			//Finding a way to cast next
 
 			temp = &sa;
-			
-			
-			
 			//Node l(NULL,vall,true); 
-
 			//Node* temp = new Node(NULL, vall,  true);
 			head->next = temp;
-
 		}
-
 		//Arbitrary Number of elements
 		else {
-
-
 			while (temp->next != NULL) {
 				continue;
 
@@ -137,13 +133,12 @@ public:
 			//
 			//
 			//
-
 			Node* curr = static_cast <Node*>(s.createNode(sizeof(struct Node(NULL, vall, true))));
-
 			curr = &sa;
 			temp->next = curr;
 		}
-
+		cout << endl;
+		cout << head->val;
 	}
 	/*
 	void mark(int vall, bool mmar) {
@@ -190,7 +185,6 @@ public:
 
 
 	}
-
 	void print() {
 		Node* temp = head; 
 		
@@ -198,13 +192,8 @@ public:
 			cout << temp->val;
 			cout << endl; 
 			temp = temp->next; 
-
-
 		}
-
-
 	}
-
 	bool search(int value) {
 		Node* temp = head;
 		//bool marked[1] = { false };
@@ -219,10 +208,7 @@ public:
 			
 			else {
 				temp = temp->next;
-
-
 			}
-
 		}
 		return false;
 	}
