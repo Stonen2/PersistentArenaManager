@@ -23,6 +23,8 @@ public:
 	salloc() {
 		blocks = 0; 
 		size = 0; 
+	//	int s = 5; 
+		//void* t = &s; 
 
 	}
 
