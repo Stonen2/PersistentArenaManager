@@ -22,7 +22,7 @@ using namespace std;
 class linkedList {
 
 private:
-
+	//Node[];
 	struct Node {
 		Node* next;
 		int val;
@@ -78,9 +78,12 @@ public:
 		//cout << sa->val;
 		//cout << vall; 
 		//cout << "Hello";
-		
+		//cout << head << "THIS IS THE VALUE OF HEAD"; 
+		//cout << endl; 
 		Node* temp = head;
+		//cout << head; 
 		//Empty list 
+		
 		if (head == NULL) {
 			head= static_cast <Node*>(s.createNode(sizeof(sa)));
 			//cout << &head; 
@@ -105,7 +108,7 @@ public:
 		//One element
 		else if (head->next == NULL) {
 			head->end = false;
-			Node * temp = static_cast <Node*>(s.createNode(sizeof(struct Node(NULL,vall,true))));
+			temp = static_cast <Node*>(s.createNode(sizeof(struct Node(NULL,vall,true))));
 			//Node* t = &temp;
 
 
@@ -118,6 +121,8 @@ public:
 			//Node l(NULL,vall,true); 
 			//Node* temp = new Node(NULL, vall,  true);
 			head->next = temp;
+			cout << endl; 
+			cout << head->val; 
 		}
 		//Arbitrary Number of elements
 		else {
@@ -137,8 +142,8 @@ public:
 			curr = &sa;
 			temp->next = curr;
 		}
-		cout << endl;
-		cout << head->val;
+		//cout << endl;
+		//cout << head->val;
 	}
 	/*
 	void mark(int vall, bool mmar) {
@@ -187,7 +192,7 @@ public:
 	}
 	void print() {
 		Node* temp = head; 
-		
+		cout << head->val; 
 		while (temp != NULL) {
 			cout << temp->val;
 			cout << endl; 

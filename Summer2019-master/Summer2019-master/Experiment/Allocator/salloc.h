@@ -10,6 +10,15 @@ class salloc{
 
 private:
 	
+	//struct memblock {
+	//	int val; 
+	//	void* next; 
+	//	memblock* next; 
+
+
+	//};
+
+	//memblock* head; 
 	int blocks; 
 	size_t size; 
 	//free List
