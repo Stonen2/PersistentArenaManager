@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <stdlib.h>
+#include <queue>
 
 using namespace std; 
 
@@ -13,13 +14,16 @@ private:
 		size_t regionsize; 
 		size_t next; 
 		int blocks; 
+		priority_queue<void*> freed; 
+		priority_queue<void*> alloc; 
 		 //free[];
 	//	 allocated[];
 
 
-		void free(void* n) {
-
+		void deal(void* n) {
+			
 			free(n);
+			freed.push(n);
 			blocks = blocks -1 ; 
 			
 		}
@@ -35,12 +39,19 @@ private:
 		}
 
 		void* alloc(size_t s) {
-			size_t temp = s; 
-			size_t pad_size = PAD(temp);
-			void* retval = &base + next;
-			next += pad_size;
-			return retval; 
+			if (freed.size() == 0) {
+				size_t temp = s;
+				size_t pad_size = PAD(temp);
+				void* retval = &base + next;
+				next += pad_size;
+				alloc.push(retval);
+				return retval;
+			}
+			else {
+				void* hold = freed.pop();
 
+				//return freed.pop();
+			}
 		}
 
 		size_t PAD(size_t s) {
