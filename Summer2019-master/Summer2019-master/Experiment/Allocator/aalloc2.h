@@ -13,11 +13,13 @@ private:
 		size_t regionsize; 
 		size_t next; 
 		int blocks; 
+		 //free[];
+	//	 allocated[];
 
 
 		void free(void* n) {
 
-			//free(n);
+			free(n);
 			blocks = blocks -1 ; 
 			
 		}
@@ -32,7 +34,7 @@ private:
 
 		}
 
-		void* malloc(size_t s) {
+		void* alloc(size_t s) {
 			size_t temp = s; 
 			size_t pad_size = PAD(temp);
 			void* retval = &base + next;
