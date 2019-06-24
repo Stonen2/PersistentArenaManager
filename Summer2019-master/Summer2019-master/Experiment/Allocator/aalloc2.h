@@ -48,8 +48,9 @@ private:
 				return retval;
 			}
 			else {
-				void* hold = freed.pop();
-
+				void* hold = freed.top();
+				freed.pop();
+				return hold; 
 				//return freed.pop();
 			}
 		}
