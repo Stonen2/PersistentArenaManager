@@ -9,9 +9,9 @@ using namespace std;
 
 
 class mapalloc {
-
+	
 private:
-	struct allocator {
+	
 		void* ad; 
 		size_t len; 
 		int pro; 
@@ -22,34 +22,28 @@ private:
 		
 		
 		
-		void* base;
-		size_t regionsize;
-		size_t next;
-		int blocks;
-		priority_queue<void*> freed;
-		priority_queue<void*> alloc;
-		//free[];
-   //	 allocated[];
+		//void* base;
+		//size_t regionsize;
+		//size_t next;
+		//int blocks;
 
 
-		void deal(void* n) {
 
-			free(n);
-			freed.push(n);
-			blocks = blocks - 1;
-
-		}
 
 
 		//Takes in all of the Parameters for a file to be Memory Mapped
+		
 
-		allocator(void* aadr, size_t ilength, int iprot, int iflags, int ifd, off_t ioffset) {
+
+	/*	mapalloc(void* aadr, size_t ilength, int iprot, int iflags, int ifd, off_t ioffset) {
 			ad = aadr; 
 			len = ilength;
 			pro = iprot; 
 			fd = ifd; 
 			offset = ioffset; 
 
+			ad = map();
+			
 			
 
 
@@ -61,29 +55,37 @@ private:
 
 
 
-		}
-		void map() {
+		}*/
+		void* map() {
+			void* temp;
+			temp = mmap(nullptr,
+				len,
+				PROT_READ | PROT_WRITE,
+				MAP_PRIVATE | MAP_ANONYMOUS,
+				-1,
+				0);
+			return temp; 
+
 
 		}
+		void* maps(size_t f) {
+			void* temp;
+			temp = mmap(nullptr,
+				f,
+				PROT_READ | PROT_WRITE,
+				MAP_PRIVATE | MAP_ANONYMOUS,
+				-1,
+				0);
+			return temp;
+
+		}
+
 		void unmap() {
 
 		}
-
-		void* alloc(size_t s) {
-			if (freed.size() == 0) {
-				size_t temp = s;
-				size_t pad_size = PAD(temp);
-				void* retval = &base + next;
-				next += pad_size;
-				alloc.push(retval);
-				return retval;
-			}
-			else {
-				void* hold = freed.top();
-				freed.pop();
-				return hold;
-				//return freed.pop();
-			}
+		
+		void free() {
+			//No Op 
 		}
 
 		size_t PAD(size_t s) {
@@ -107,7 +109,7 @@ private:
 
 
 
-	};
+	
 
 
 
@@ -116,7 +118,19 @@ private:
 public:
 
 
+	void* malloc(size_t s) {
 
+		void* temp = maps(s);
+
+		return temp;
+
+	}
+
+	mapalloc(size_t s) {
+		len = s;
+		ad = map();
+
+	}
 
 
 };
