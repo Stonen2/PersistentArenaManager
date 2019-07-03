@@ -224,6 +224,37 @@ public:
 	}
 
 
+	void* map() {
+		void* temp;
+		temp = mmap(nullptr,
+			len,
+			PROT_READ | PROT_WRITE,
+			MAP_PRIVATE | MAP_ANONYMOUS,
+			-1,
+			0);
+		return temp;
+
+
+	}
+	void* maps(size_t f) {
+		void* temp;
+		temp = mmap(nullptr,
+			f,
+			PROT_READ | PROT_WRITE,
+			MAP_PRIVATE | MAP_ANONYMOUS,
+			-1,
+			0);
+		return temp;
+
+	}
+
+	void* malloc(size_t s) {
+
+		void* temp = maps(s);
+
+		return temp;
+
+	}
 
 
 	void free() {
