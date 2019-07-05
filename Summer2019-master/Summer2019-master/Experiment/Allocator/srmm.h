@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <sys/mman.h>
 #include <cstddef>
 using namespace std;
 
@@ -22,16 +23,17 @@ private:
 		Node* next;
 		void* data;
 		bool inuse;
-
+		size_t Allocsize;
 
 		//int val;
 		//int key; 
 		//bool marked;
 		bool end;
-		Node(Node* nnext, void* id, bool iuse, bool iend) {
+		Node(Node* nnext, void* id, bool iuse, size_t s, bool iend) {
 			this->next = nnext;
 			this->data = id;
 			this->inuse = iuse;
+			this->Allocsize = s;
 			//this->key = kkey;
 			//this->marked = mmarked;
 			this->end = iend;
@@ -62,6 +64,11 @@ public:
 
 	srmm() {
 		head = NULL;
+		heap = 0;
+		next = 0;
+		start = nullptr;
+		count = 0;
+
 		/*
 		Instaniate Some of the allocator data here
 
@@ -84,18 +91,18 @@ public:
 
 	//Node(Node* nnext, T vval, bool mmarked, bool iend) {
 
-	void insert(void* vall) {
+	void insert(void* vall, size_t insize) {
 
 		Node* temp = head;
 		//Empty list 
 		if (head == NULL) {
-			head = new Node(NULL, vall, true, true);
+			head = new Node(NULL, vall, true, insize, true);
 		}
 
 		//One element
 		else if (head->next == NULL) {
 			head->end = false;
-			Node* temp = new Node(NULL, vall, true, true);
+			Node* temp = new Node(NULL, vall, true, insize, true);
 			head->next = temp;
 
 		}
@@ -111,10 +118,10 @@ public:
 
 			}
 			//temp->marked = false;
-			Node* curr = new Node(NULL, vall, true, true);
+			Node* curr = new Node(NULL, vall, true, insize, true);
 			temp->next = curr;
 		}
-
+		count = count + 1;
 	}
 	/*
 	void mark(int vall, bool mmar) {
@@ -142,6 +149,7 @@ public:
 
 	}*/
 	void remove() {
+		//size_t temps = head ->;
 		if (head == NULL) {
 			cout << "NULL";
 		}
@@ -157,6 +165,7 @@ public:
 			head = temp;
 		}
 
+		count = count - 1;
 
 
 	}
@@ -166,6 +175,9 @@ public:
 
 		while (temp != NULL) {
 			cout << temp->data;
+			cout << endl;
+			cout << "Size of " << temp->Allocsize;
+			cout << endl;
 			cout << endl;
 			temp = temp->next;
 
@@ -197,14 +209,7 @@ public:
 		return false;
 	}
 
-	void* malloc(size_t s) {
-
-		size_t pad_size = PAD(s);        // TODO: pad the size appropriately
-		void* retval = &start + next;
-		next += pad_size;
-		heap += pad_size;
-		return retval;
-	}
+	
 
 	size_t PAD(size_t s) {
 		size_t temp = s;
@@ -224,7 +229,17 @@ public:
 	}
 
 
-	void* map() {
+
+	void* malloc(size_t s) {
+
+		void* temp = maps(s);
+
+		return temp;
+
+	}
+
+	
+	void* map(size_t len) {
 		void* temp;
 		temp = mmap(nullptr,
 			len,
@@ -248,13 +263,8 @@ public:
 
 	}
 
-	void* malloc(size_t s) {
 
-		void* temp = maps(s);
 
-		return temp;
-
-	}
 
 
 	void free() {
