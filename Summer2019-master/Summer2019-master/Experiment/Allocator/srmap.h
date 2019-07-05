@@ -234,7 +234,27 @@ class srmap {
 			//return temp; 
 		}
 
-		void free() {
+		void free(void * stemp) {
+			Node* temp = head; 
+			if (head == NULL) {
+				cout << "List is empty nothing to free";
+
+			}
+			else {
+
+				while (temp != NULL) {
+					if (temp->data == stemp) {
+						temp->inuse = false; 
+						cout << "WE FOUND IT " << endl;
+						break;
+					}
+					else {
+
+						temp = temp->next;
+					}
+				}
+
+			}
 
 			/*
 			

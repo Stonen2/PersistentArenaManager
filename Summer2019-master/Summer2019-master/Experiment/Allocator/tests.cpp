@@ -33,7 +33,7 @@ int main() {
 	Testing.insert(tfds,sa);
 	Testing.insert(tt,sb);
 	cout << endl; 
-
+	Testing.free(tfds);
 	cout << endl; 
 
 	
@@ -69,6 +69,9 @@ int main() {
 	size_t lmbbb = sizeof(lmb);
 	Mapping.insert(lmaa,lmaaa);
 	Mapping.insert(lmbb,lmbbb);
+	cout << endl; 
+	Mapping.free(lmaa);
+	
 	cout << endl;
 	cout << "Its Starting" << endl; 
 	Mapping.print();
