@@ -1,5 +1,4 @@
 //Created By Nick Stone 
-//Created on 7/1/2019
 //Refactored 7/7/2019
 //The goal of this program is to incorporate a basic allocator which is self referential 
 //Each node holds a pointer to a void* namely these are the address locations 
