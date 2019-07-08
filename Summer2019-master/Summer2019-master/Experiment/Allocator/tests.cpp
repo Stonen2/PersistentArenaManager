@@ -25,13 +25,21 @@ int main() {
 	srmap Testing;
 	void* tfds = Testing.malloc(sizeof(a));
 	void* tt = Testing.malloc(sizeof(b));
+	
+	
 	l.print(); 
 	cout << endl; 
 	cout << "------------" << endl;
 	size_t sa = sizeof(a);
 	size_t sb = sizeof(b);
+	cout << tt << endl << "void * ";
 	Testing.insert(tfds,sa);
 	Testing.insert(tt,sb);
+	cout << "insert works" << endl;
+	Testing.free(tt);
+	void* tgg = Testing.malloc(sizeof(c));
+	Testing.insert(tgg, sizeof(c));
+
 	cout << endl; 
 	Testing.free(tfds);
 	cout << endl; 

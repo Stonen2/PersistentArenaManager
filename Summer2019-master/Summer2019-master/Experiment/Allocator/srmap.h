@@ -1,3 +1,11 @@
+//Created By Nick Stone 
+//Created on 7/1/2019
+//Refactored 7/7/2019
+//The goal of this program is to incorporate a basic allocator which is self referential 
+//Each node holds a pointer to a void* namely these are the address locations 
+//That hold the values that this program allocates.
+//This program also frees the memory as well...
+
 #pragma once
 #include <iostream>
 #include <cstddef>
@@ -5,14 +13,6 @@ using namespace std;
 
 
 class srmap {
-
-	//Created by Nick Stone and Thomas Maranzatto 
-
-	//Concurrent single linked link list. 
-
-	//Assuming all values are unique
-
-	//Created on 6/17/2019
 
 	
 
@@ -122,31 +122,7 @@ class srmap {
 			}
 			count = count + 1; 
 		}
-		/*
-		void mark(int vall, bool mmar) {
-			if (head == NULL) {
-				cout << "List is empty";
-				//break;
-			}
-			Node* temp = head;
-			while (temp->next != NULL) {
-				if (temp->val == vall && temp->marked == mmar) {
-					cout << "Already IN this state";
-					break;
-
-				}
-				else if (temp->val == vall && temp->marked != mmar) {
-					temp->marked = mmar;
-
-				}
-				else {
-					temp = temp->next;
-
-				}
-
-			}
-
-		}*/
+	
 		void remove() {
 			//size_t temps = head ->;
 			if (head == NULL) {
@@ -209,6 +185,31 @@ class srmap {
 		}
 
 		void* malloc(size_t s) {
+			/*
+			The following is logic to identify is memory has already been allocated and is 
+			not needed. IE just overwrite the node and call it in use!
+
+			
+			*/
+			Node* temp = head; 
+			while (temp != NULL) {
+				if (temp->inuse == false) {
+					if (temp->Allocsize == s) {
+						return temp->data;
+
+
+					}
+					else {
+						temp = temp->next; 
+					}
+				}
+				else {
+					temp = temp->next;
+
+				}
+
+			}
+
 
 			size_t pad_size = PAD(s);        // TODO: pad the size appropriately
 			void* retval = &start + next;
@@ -255,18 +256,6 @@ class srmap {
 				}
 
 			}
-
-			/*
-			
-			
-			Temporary No- OP 
-			
-			
-			*/
-
-
-
-
 		}
 
 };

@@ -1,3 +1,14 @@
+//Created By Nick Stone 
+//Created on 7/1/2019
+//Refactored 7/7/2019
+//The goal of this program is to incorporate a basic allocator which is self referential 
+//Each node holds a pointer to a void* namely these are the address locations 
+//This program will use sys mann or MMAP and Munmap virtual pages
+//That hold the values that this program allocates.
+//This program also frees the memory as well...
+
+
+
 #pragma once
 #include <iostream>
 #include <sys/mman.h>
@@ -7,13 +18,7 @@ using namespace std;
 
 class srmm {
 
-	//Created by Nick Stone and Thomas Maranzatto 
-
-	//Concurrent single linked link list. 
-
-	//Assuming all values are unique
-
-	//Created on 6/17/2019
+	
 
 
 
@@ -232,9 +237,24 @@ public:
 
 	void* malloc(size_t s) {
 
-		void* temp = maps(s);
 
-		return temp;
+		Node* temp = head;
+		while (temp != NULL) {
+			if (temp->inuse == false) {
+				if (temp->Allocsize == s) {
+					return temp->data;
+
+
+				}
+
+			}
+			temp = temp->next;
+
+		}
+
+		void* temps = maps(s);
+
+		return temps;
 
 	}
 
