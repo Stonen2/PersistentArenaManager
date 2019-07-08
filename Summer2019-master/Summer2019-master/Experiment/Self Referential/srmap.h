@@ -110,10 +110,11 @@ class srmap {
 			else {
 
 
-				while (temp->next != NULL) {
+				while (temp ->next != NULL) {
+					temp = temp->next; 
 					continue;
 
-
+					
 
 				}
 				//temp->marked = false;
@@ -150,9 +151,9 @@ class srmap {
 
 			while (temp != NULL) {
 				cout << temp->data;
-				cout << endl; 
-				cout << "Size of " << temp->Allocsize;
-				cout << endl; 
+				//cout << endl; 
+				cout << " Size of " << temp->Allocsize;
+				//cout << endl; 
 				cout << endl;
 				temp = temp->next;
 
@@ -191,22 +192,33 @@ class srmap {
 
 			
 			*/
-			Node* temp = head; 
-			while (temp != NULL) {
-				if (temp->inuse == false) {
-					if (temp->Allocsize == s) {
+			Node* temph = head; 
+			
+			if (head == NULL) {
+
+			}
+
+			while (temph != NULL) {
+				if (temph->inuse == false) {
+					if (temph->Allocsize == s) {
 						cout << "about to return some data";
-						return temp->data;
+						temph->inuse = true;
+						return temph->data;
 
 
 					}
+
+
 					else {
-						temp = temp->next; 
+						temph = temph->next; 
 					}
 				}
-				else {
-					temp = temp->next;
 
+
+				else {
+					temph = temph->next;
+					cout << temph->data << endl; 
+					cout << "We are in the first else";
 				}
 
 			}
@@ -248,12 +260,13 @@ class srmap {
 					if (temp->data == stemp) {
 						temp->inuse = false; 
 						cout << "WE FOUND IT " << endl;
-						temp = temp->next; 
+						//temp = temp->next; 
 						return 0; 
 					}
 					else {
 
 						temp = temp->next;
+						cout << "We are stuck in the else and its a permanent loop";
 					}
 					
 				}

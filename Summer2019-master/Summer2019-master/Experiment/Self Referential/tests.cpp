@@ -36,10 +36,19 @@ int main() {
 	Testing.insert(tfds,sa);
 	Testing.insert(tt,sb);
 	cout << "insert works" << endl;
-	Testing.free(tt);
+	int dd = Testing.free(tt);
+	cout << endl; 
+	cout << dd; 
+	cout << endl; 
 	cout << "Free works";
-	void* tgg = Testing.malloc(sizeof(c));
-	Testing.insert(tgg, sizeof(c));
+	void* thisis = Testing.malloc(sizeof(c));
+
+
+	cout << thisis << endl << "HERE IT IS";
+	size_t sc = sizeof(c);
+	
+	Testing.insert(thisis, sc);
+	cout << "********************************************************************************************************";
 
 	cout << endl; 
 	Testing.free(tfds);
@@ -50,6 +59,7 @@ int main() {
 
 	cout << "--------";
 	cout << endl;
+	cout << "*****" << endl;
 	Testing.print();
 	cout << endl; 
 
@@ -83,6 +93,7 @@ int main() {
 	
 	cout << endl;
 	cout << "Its Starting" << endl; 
+	cout << "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&" << endl;
 	Mapping.print();
 	cout << endl; 
 

@@ -124,6 +124,7 @@ public:
 
 
 			while (temp->next != NULL) {
+				temp = temp->next; 
 				continue;
 
 
@@ -243,6 +244,7 @@ public:
 		while (temp != NULL) {
 			if (temp->inuse == false) {
 				if (temp->Allocsize == s) {
+					temp->inuse = true; 
 					return temp->data;
 
 
