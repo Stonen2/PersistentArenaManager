@@ -36,16 +36,17 @@ int main() {
 	srmap Testing;
 	void* tfds = Testing.malloc(sizeof(a));
 	void* tt = Testing.malloc(sizeof(b));  
+	void* tst = Testing.malloc(sizeof(d));
 	cout << "------------" << endl;
 
-
+	size_t sd = sizeof(d);
 	size_t sa = sizeof(a);
 	size_t sb = sizeof(b);
 	cout << tt << endl << "void * ";
 	//Insert the first couple of values
 	Testing.insert(tfds,sa);
 	Testing.insert(tt,sb);
-	
+	Testing.insert(tst, sd);
 	
 	cout << "insert works" << endl;
 
