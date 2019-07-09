@@ -12,19 +12,22 @@ class CrashRecoveryBitMap {
 private: 
 
 	vector<bool> test;
+	int nextfits;
+	void* start; 
 
 	//Bit Map
 
 public: 
 
-	CrashRecoveryBitMap(size_t s) {
-
+	CrashRecoveryBitMap(size_t s, void* instart) {
+		nextfits = 0; 
 		for (int i = 0; i < s; i++) {
 			test.push_back(false);
 
 
 
 		}
+		start = instart; 
 		//Instantiate Bit map 
 
 	}
@@ -36,7 +39,17 @@ public:
 
 	}
 	//Take something in and rebuild the bit map
-	void recover() {
+	void recover(void* test, size_t s) {
+		//Take in a Void * 
+
+		
+
+		//Take a Size 
+
+		//First round is trivial if a Node exists in the next link in the chain from the List
+
+		//Slap a 1 
+
 
 
 	}
@@ -44,8 +57,18 @@ public:
 
 	//Returns the position in the bit array that is next to be allocated
 	int nextfit() {
+		if (nextfits == false) {
+			for (int i = nextfits; i < test.size(); i++) {
+				if (test[i] == false) {
+					nextfits = i; 
+				}
 
-		for (int i = 0; i < test.size(); i++) {
+			}
+
+			return nextfits; 
+
+		}
+		for (int i = nextfits; i < test.size(); i++) {
 			if (test[i] == false) {
 				return i; 
 
@@ -59,9 +82,44 @@ public:
 
 	}
 
+	int bestfit(int start, int finish) {
+
+
+	}
+
+
+	int firstfit() {
+		for (int i = 0; i < test.size(); i++) {
+
+			if (test[i] == false) {
+				return i; 
+
+			}
+
+		}
+
+	}
 
 	//Return the range of positions that are needed and free to allocate the given size too
-	int findpos(int pos, size_t s ) {
+	int findpos(int num ) 
+	{
+		int start = 0; 
+		int temp = 0; 
+		for (int i = 0; i < test.size(); i++) {
+			if (test[i] == false) {
+				
+				
+				for (int j = 0; j < test.size(); j++) {
+
+
+				}
+
+
+			}
+
+
+		}
+
 
 
 	}
