@@ -8,6 +8,7 @@
 #pragma once
 #include <iostream>
 #include <cstddef>
+#include <vector>
 using namespace std;
 
 
@@ -161,6 +162,50 @@ public:
 
 
 	}
+
+	vector<size_t> sizeprint() {
+		
+		Node* temp = head;
+		vector<size_t> sizes; 
+		while (temp != NULL) {
+			cout << temp->data;
+			//cout << endl; 
+			sizes.push_back(temp->Allocsize);
+			cout << " Size of " << temp->Allocsize;
+			//cout << endl; 
+			cout << endl;
+			temp = temp->next;
+
+
+		}
+		return sizes; 
+
+
+	}
+
+	vector<void*> voidprint() {
+
+		Node* temp = head;
+		vector<void*>voidss;
+		while (temp != NULL) {
+			cout << temp->data;
+			//cout << endl; 
+			voidss.push_back(temp->data);
+			cout << " Size of " << temp->Allocsize;
+			//cout << endl; 
+			cout << endl;
+			temp = temp->next;
+
+
+		}
+		return voidss;
+
+
+	}
+
+
+
+
 
 	bool search(void* value) {
 		Node* temp = head;

@@ -1,13 +1,16 @@
 #include <iostream>
 #include "CrashRecoveryBitMap.h"
 #include "srmap.h"
+#include <vector>
 
 using namespace std; 
-
+vector<size_t> holdsizes;
+vector<void*> holdptrs;
 
 
 int main() {
-
+	
+	
 	int a = 5; 
 	int b = 6;  
 	int d = 8; 
@@ -50,6 +53,9 @@ int main() {
 	cout << "************************************88" << endl; 
 	
 	Testing.print();
+	holdptrs = Testing.voidprint();
+	holdsizes = Testing.sizeprint();
+
 	cout << endl; 
 	cout << tt;
 	cout << endl; 
@@ -57,8 +63,29 @@ int main() {
 	cout << endl;
 	cout << "******************************************8";
 	
-	
-	
+	m.flipbits(2);
+	cout << endl; 
+	m.print();
+	cout << endl; 
+	cout << "Best fit is " <<  m.nextfit();
+	cout << endl; 
+	cout << m.findpos(3);
+	cout << endl << endl << endl << endl; 
+
+	cout << "_____________________________" << endl; 
+	for (int i = 0; i < holdptrs.size(); i++) {
+
+		cout << holdptrs[i];
+		cout << endl; 
+		cout << holdsizes[i];
+		cout << endl; 
+
+
+	}
+	cout << "_________________________________" << endl; 
+	cout << endl; 
+
+	Testing.print();
 	//cout << "Program Terminated";
 	//int dd = 5; 
 	//size_t sdd = sizeof(dd);
