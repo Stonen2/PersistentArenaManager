@@ -1,4 +1,4 @@
-/*
+
 
 #include <iostream>
 #include <limits>
@@ -52,4 +52,4 @@ int main()
 	std::cout << v.get_allocator().get_allocations() << std::endl;
 
 	return 0;
-}*/
+}
