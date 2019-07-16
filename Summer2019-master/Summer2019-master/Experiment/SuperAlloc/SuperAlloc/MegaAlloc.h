@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <list>
 #include <stdlib.h>
-#include <vector>
+//#include <vector>
 #include <atomic>
 
 using namespace std;
@@ -20,14 +20,14 @@ public:
 	using const_pointer = const T*;
 	using size_type = size_t;
 	using void_star = void*;
-	using bitmap = vector<bool>;
-
+	using bitmap = int[5];
+	
 
 private:
 
 	struct Arena {
 		struct Arena* next;
-		bitmap maps;
+		int maps[5];
 		size_type Arenasize;
 		void_star startarena;
 		atomic_flag lock;
@@ -90,13 +90,13 @@ public:
 		//ArenaStart = temp
 		temp->Arenasize = chunk / 2;
 		temp->startarena = temp;
-		bitmap test;
-		for (int i = 0; i < (int)temp->Arenasize; i++) {
-			test[i] = false;
+	
+		for (int i = 0; i < 4; i++) {
+			temp->maps[i] = 0;
 
 		}
-
-		temp->maps = test;
+		
+		//temp->maps = test;
 
 		return temp;
 	}
