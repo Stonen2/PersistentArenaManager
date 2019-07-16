@@ -116,6 +116,7 @@ public:
 			e = arenainfo(e);
 			//SEt Tail Not to HeadNode -> next
 			Head_Arena = e;
+			Head_Arena->next = NULL;
 			/*
 			Call Functions to Establish Node
 			*/
@@ -137,6 +138,7 @@ public:
 
 
 			Next_Arena = e;
+			Next_Arena->next = NULL;
 			Next_Arena = Next_Arena->next;
 
 		}
@@ -176,7 +178,22 @@ public:
 
 	}
 
+	void print() {
+		Arena* temp; 
+		temp = Head_Arena;
 
+		while (temp != NULL) {
+
+			cout << temp->startarena; 
+			cout << endl; 
+			cout << temp->maps[0];
+			temp = temp->next; 
+		}
+		cout << "Finished";
+
+
+
+	}
 
 
 	/*

@@ -13,7 +13,14 @@ int main() {
 	//cout << s.getchunk();
 
 	cout << "here we are";
+	cout << endl; 
+	s.print();
 
+
+	cout << "Finished";
+
+
+	return 0; 
 
 	
 	
