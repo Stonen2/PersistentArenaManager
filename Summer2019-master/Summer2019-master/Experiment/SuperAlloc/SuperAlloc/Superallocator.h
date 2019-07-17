@@ -244,7 +244,7 @@ private:
 	};
 	BM* bitmaps = nullptr;
 	Arena* next_Arena = nullptr;
-	static const size_type num_chunk = 30;
+	static const size_type num_chunk = 20;
 	void_star start; 
 	size_type HeapSize;
 	size_type nexts; 
@@ -261,7 +261,7 @@ private:
 
 };
 
-
+/*
 int main() {
 
 	Superallocator<int> s;
@@ -282,4 +282,4 @@ int main() {
 
 
 	return 0; 
-}
+}*/

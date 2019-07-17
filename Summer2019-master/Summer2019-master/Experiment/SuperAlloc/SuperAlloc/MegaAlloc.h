@@ -20,14 +20,16 @@ public:
 	using const_pointer = const T*;
 	using size_type = size_t;
 	using void_star = void*;
-	using bitmap = int[5];
+	//using bitmap = int[5];
 	
 
 private:
-
+	int count = 0; 
 	struct Arena {
 		struct Arena* next;
-		int maps[5];
+		
+		int maps [100];
+		//list<int> maps;
 		size_type Arenasize;
 		void_star startarena;
 		atomic_flag lock;
@@ -76,6 +78,7 @@ public:
 		void_star retval = &start + chunk;
 		//nexts += pad_size;
 		HeapSize += chunk;
+		count = count + 1;
 		//numallocs += 1;
 		chunk = chunk * 2;
 		return retval;
@@ -85,6 +88,16 @@ public:
 
 	//Bitallocate -> individually allocates based on bitmap..
 	void_star bitallocate() {
+		//Check Head Node... 
+
+		//If no head Node allocate
+		//Search the head nodes array... Lets fix that while we are here 
+
+		//Then go to the next node.. If its NULL allocate
+		//
+
+
+
 
 	}
 
@@ -93,8 +106,9 @@ public:
 		//ArenaStart = temp
 		temp->Arenasize = chunk / 2;
 		temp->startarena = temp;
-	
-		for (int i = 0; i < 4; i++) {
+		//temp->maps = new int[chunk /2]; 
+		//temp->maps = int[Arenasize] f;
+		for (int i = 0; i < 99; i++) {
 			temp->maps[i] = 0;
 
 		}
