@@ -15,11 +15,17 @@ int main() {
 	//cout << s.getchunk();
 	int a = 19;
 	int b = 200; 
-
+	int c = 300; 
+	
 	void * fds = s.bitallocate(sizeof(a));
 	//s.allocate();
 	void* letssee = s.bitallocate(sizeof(b));
+	void* comeon = s.bitallocate(sizeof(c));
 	//cout << "here we are";
+	void* strt = s.getstart();
+
+	size_t temp = (size_t)strt - (size_t)fds; 
+
 	cout << endl; 
 	cout << endl; 
 	cout << "PRINT"<< endl;
@@ -35,7 +41,12 @@ int main() {
 
 	//cout << "Finished";
 	cout << fds << endl;
-	cout << letssee; 
+	cout << letssee << endl; 
+	cout << comeon; 
+	cout << endl; 
+	cout << temp; 
+	cout << endl; 
+	cout << "FINISH";
 	//int i = std::stoi("01000101", nullptr, 2);
 	//cout << i; 
 	

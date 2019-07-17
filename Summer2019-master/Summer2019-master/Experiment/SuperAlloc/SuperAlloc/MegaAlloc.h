@@ -66,6 +66,8 @@ public:
 	int getarenas() {return numarenas; 	}
 
 	size_type getchunk() {	return chunk;}
+	void_star getstart() { return start; }
+
 
 	//Malloc -> Moves the program counter 
 	void_star malloc() {
@@ -79,8 +81,8 @@ public:
 
 	void_star lowlevelalloc(size_type posstart, size_type thisbig, void_star arenast) {
 
-		void_star newplace= &arenast + posstart;
-		newplace = &newplace + thisbig;
+		void_star newplace= &arenast + posstart + thisbig;
+		
 		return newplace; 
 
 	}
@@ -150,6 +152,10 @@ public:
 
 
 			size_type pos = s.find(hold);
+			cout << "POSITION FOUND AT " << pos; 
+			cout << endl; 
+			cout << nhold; 
+			cout << endl; 
 			s = s.replace(pos, needbig, nhold);
 			//Send String to be uint
 				//Set map to be new uint
@@ -433,6 +439,7 @@ public:
 			//SEt Tail Not to HeadNode -> next
 			Head_Arena = e;
 			Head_Arena->next = NULL;
+			start = Head_Arena->startarena; 
 			/*
 			Call Functions to Establish Node
 			*/
@@ -511,9 +518,19 @@ public:
 			//cout << temp->startarena; 
 			
 			cout << temp->startarena << " WIth the position in the linked list as " << count << endl; 
+			
+			cout << endl; 
+			
+			cout << endl; 
+
 			count = count + 1; 
 			//cout << temp->map << endl;
+			
 			cout << "Map Looks like this";
+			cout << endl; 
+			cout << temp->map; 
+			cout << endl; 
+
 			cout << toBinary(temp->map);
 			//cout << count << endl; 
 			//cout << endl; 
