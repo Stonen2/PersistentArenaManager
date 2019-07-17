@@ -59,7 +59,10 @@ public:
 	using aa = Arena *;
 
 
+	int getarenas() {
 
+		return numarenas; 
+	}
 
 	size_type getchunk() {
 
@@ -104,11 +107,11 @@ public:
 	void allocate() {
 		//numallocations += 1; 
 		numarenas = numarenas + 1;
-		Arena* e;
+		
 
 		//0 Elements;
 		if (Head_Arena == NULL) {
-
+			Arena* e;
 			e = reinterpret_cast<Arena*>(malloc());
 			//Set all of Node values in e; 
 			//SEt head Node to E; 
@@ -127,19 +130,38 @@ public:
 
 
 		}
+		else if (Head_Arena->next == NULL) {
+
+			Arena* te;
+			te = reinterpret_cast<Arena*>(malloc());
+			te = arenainfo(te);
+			Head_Arena->next = te; 
+			
+		}
 		else {
+			//Arena* temp; 
+			Arena* he;
+			Next_Arena = Head_Arena; 
+			while (Next_Arena -> next != NULL) {
+
+				//Get to the last Node
+				Next_Arena = Next_Arena->next; 
+
+			}
+
+			
 			/*
 			Make New Node
 
 			*/
-			e = reinterpret_cast<Arena*>(malloc());
+			he = reinterpret_cast<Arena*>(malloc());
 
-			e = arenainfo(e);
-
-
-			Next_Arena = e;
-			Next_Arena->next = NULL;
-			Next_Arena = Next_Arena->next;
+			he = arenainfo(he);
+			cout << he << endl;
+			
+			Next_Arena -> next = he;
+			//Next_Arena->next = NULL;
+			//Next_Arena = Next_Arena->next;
 
 		}
 	}
@@ -147,7 +169,7 @@ public:
 
 	MegaAlloc()
 	{
-		numarenas = 1; 
+		numarenas = 0; 
 		HeapSize = 64; 
 		chunk = 64; 
 		Head_Arena = NULL; 
@@ -181,12 +203,17 @@ public:
 	void print() {
 		Arena* temp; 
 		temp = Head_Arena;
-
+		int count = 0; 
 		while (temp != NULL) {
 
-			cout << temp->startarena; 
-			cout << endl; 
-			cout << temp->maps[0];
+			//cout << temp->startarena; 
+			
+			cout << temp->startarena << " WIth the position in the linked list as " << count << endl; 
+			count = count + 1; 
+			
+			//cout << count << endl; 
+			//cout << endl; 
+			//cout << temp->maps[0];
 			temp = temp->next; 
 		}
 		cout << "Finished";
