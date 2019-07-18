@@ -1,10 +1,10 @@
+//Created by Nick Stone
 #pragma once
 #include <iostream>
 #include <cstddef>
 #include <stdlib.h>
 #include <atomic>
 #include <string>
-//Need to include Uinptrs
 #include <cstdint>
 #include <cmath>
 
@@ -17,6 +17,7 @@ template <class T>
 class MegaAlloc {
 
 public: 
+	//
 	using value_type = T;
 	using pointer = T *;
 	using const_pointer = const T*;
@@ -70,7 +71,16 @@ public:
 
 
 	//Malloc -> Moves the program counter 
+	//The goal of the arena allocation is to actually allocate more memory as few as times as possible. 
+	//Thus meaning that everytime we allocate we set our chunk size or the amount of memory that we are allocating
+	//To be chunk * 2 or to appear in 64 bits then 128 bits then 256 bits then 512.... etc. 
+
 	void_star malloc() {
+	
+		//Take in no parameters
+		//Create a new void star that points to the first position and adds the size to the void pointer
+		//THen we increment the global counters and chunk for the next allocation to happen
+		//Return the new pointer that is pointing to the new arena
 		void_star retval = &start + chunk;
 		HeapSize += chunk;
 		count = count + 1;
@@ -78,7 +88,11 @@ public:
 		return retval;
 	}
 
-
+	//This functions goal is to be used to manipulate a void pointer to then be returned to the programmer 
+	//The function will take in the size_t of the position and then it will take the size of the object that needs
+	//to be allocated then it will take in the start of the arena that the object is being allocated too
+	//Then a new void pointer will be created and returned that will be pointing to an object within the 
+	//Range of bits in the given arena
 	void_star lowlevelalloc(size_type posstart, size_type thisbig, void_star arenast) {
 
 		void_star newplace= &arenast + posstart + thisbig;
@@ -86,6 +100,12 @@ public:
 		return newplace; 
 
 	}
+
+	//We take in the bit map from an arena and the size of the object that is trying to be allocated to the given region
+	//we turn the bit map into a binary string and then check that string to make sure that it has a given number of 0s
+	//in a row that will allow for an object to be allocated
+	// If it has room we return true
+	//if not enough room to allocate then we return false 
 
 	bool hasroom(uint64_t s , size_type big) {
 		string temp = "";
@@ -433,6 +453,7 @@ public:
 		if (Head_Arena == NULL) {
 			Arena* e;
 			e = reinterpret_cast<Arena*>(malloc());
+			
 			//Set all of Node values in e; 
 			//SEt head Node to E; 
 			e = arenainfo(e);
@@ -450,6 +471,7 @@ public:
 
 			Arena* te;
 			te = reinterpret_cast<Arena*>(malloc());
+			//te->startarena = te; 
 			te = arenainfo(te);
 			Head_Arena->next = te; 
 			
@@ -497,41 +519,48 @@ public:
 		//Call Allocate 
 	}
 
+
+
 	~MegaAlloc()
 	{
 
 
-
 	}
-	//Allocate -> Calls Malloc and Sets a new Arena
-	void deallocate(void_star e, size_type s) {
 
-		reinterpret_cast<Arena*>(e)->next = Next_Arena;
-		Next_Arena = reinterpret_cast<Arena*>(e);
+
+	// Frees a bit map in a given arenas
+	void deallocate(Arena * a) {
+
+		free(a);
 	}
+
+
+	//This function will iterate through the current linked list and will print the bit map in the arenas 
+	//As well as some other information to ensure that the right information is being passed
 	void print() {
 		Arena* temp; 
 		temp = Head_Arena;
-		int count = 0; 
+		int counter = 0; 
 		while (temp != NULL) {
 
 			//cout << temp->startarena; 
 			
-			cout << temp->startarena << " WIth the position in the linked list as " << count << endl; 
+			cout << temp->startarena << " WIth the position in the linked list as " << counter << endl; 
 			
 			cout << endl; 
 			
 			cout << endl; 
 
-			count = count + 1; 
+			counter = counter + 1; 
 			//cout << temp->map << endl;
 			
 			cout << "Map Looks like this";
 			cout << endl; 
-			cout << temp->map; 
+			cout << temp->map << " " << endl; 
 			cout << endl; 
 
-			cout << toBinary(temp->map);
+			cout << toBinary(temp->map) << " TO binary" << endl;
+			cout << endl;
 			//cout << count << endl; 
 			//cout << endl; 
 			//cout << temp->maps[0];
@@ -540,6 +569,9 @@ public:
 		cout << "Finished";
 	}
 
+	//Set every value each 64 bit pointer to be 0
+	//THis will allow the algorithm to revisit pointers
+	//and reallocate all of the values
 	void free(Arena* e) {
 		e->map = 0; 
 		e->map1 = 0;
@@ -554,17 +586,21 @@ public:
 
 	
 	
-	//Bit map functions
+	//We take in a none string in the form of a 
 	string toBinary(const T& t)
 	{
 		string s = "";
-		int n = sizeof(T) * 8;
+		uint64_t n = sizeof(T) * 8;
 		for (int i = n; i >= 0; i--)
 		{
 			s += (t & (1 << i)) ? "1" : "0";
 		}
 		return s;
 	}
+
+
+	//We take in a string and we want to turn the string back into a Uint64_t
+	//This is used in the process of changing and altering the bit map that each individual node holds. 
 
 	uint64_t fromString(string binaryString) {
 		uint64_t value = 0;
@@ -585,6 +621,12 @@ public:
 
 
 
+	//Function designed to take in a mega allocator and reconstruct the bit map 
+
+	void recovery() {
+		//Logic needs to be figured out after the allocator can allocate properly
+
+	}
 
 
 
