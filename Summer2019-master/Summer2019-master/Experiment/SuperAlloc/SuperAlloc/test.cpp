@@ -3,6 +3,7 @@
 #include <conio.h> //for getch()
 #include <string>
 #include <cmath>
+#include <bitset>
 using namespace std; 
 
 
@@ -67,17 +68,27 @@ int main() {
 	cout << endl; 
 	cout << temp; 
 	cout << endl; 
-	cout << "FINISH";
-	//int i = std::stoi("01000101", nullptr, 2);
-	//cout << i; 
-	
-	//char sasd = "00000";
-	//char* ffa = sasd;
-	//int i= strtol(ffa, nullptr, 16);
-	//cout << i;
-	//cout << endl; 
-	//cout << whynot; 
 
+
+	cout << "-------------------------" << endl; 
+
+
+
+	uint64_t forfucks = 10; 
+
+	bitset<64> bitset1(forfucks);
+	cout << bitset1;
+
+
+
+
+
+
+
+
+
+
+	cout << endl << "FINISH";
 
 
 
