@@ -1,6 +1,6 @@
 #include <iostream>
 #include "MegaAlloc.h"
-#include "ultra.h"
+//#include "ultra.h"
 #include <conio.h> //for getch()
 #include <string>
 #include <cmath>
@@ -24,7 +24,7 @@ int main() {
 	int strawman2 = 495;
 	int	strawman3 = 399; 
 	int strawman4 = 495; 
-
+	//size_t tempss = 43; 
 	void* dptr = s.bitallocate(sizeof(d));
 	void* straw = s.bitallocate(sizeof(strawman));
 	void * straw1  = s.bitallocate(sizeof(strawnan1));	
@@ -32,7 +32,7 @@ int main() {
 	void * straw3 = s.bitallocate(sizeof(strawman2));
 	void * straw4 = s.bitallocate(sizeof(strawman4));
 
-
+	//void* notes = s.bitallocate(tempss);
 	void * fds = s.bitallocate(sizeof(a));
 	//s.allocate();
 	void* letssee = s.bitallocate(sizeof(b));
@@ -74,12 +74,20 @@ int main() {
 	cout << "-------------------------" << endl; 
 	cout << endl; 
 	cout << "START ULTRA" << endl; 
-	ultra<int> u; 
+	bitset<20> bits; 
+	cout << bits[1];
 
 
-	u.allocate();
-	u.allocate();
-	u.print();
+
+
+
+
+	//ultra<int> u; 
+
+
+	//u.allocate();
+	//u.allocate();
+	//u.print();
 
 	//forfucks = (uint64_t)bitset1; 
 
