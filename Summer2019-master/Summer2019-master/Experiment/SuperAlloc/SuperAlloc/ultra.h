@@ -159,7 +159,7 @@ public:
 	size_type changemap(size_type needbig, Arena* e, int maps) {
 		bitset<64> temporary;
 		size_type counter = 0;
-		int positionchanging = 0; 
+		size_type positionchanging = 0; 
 
 		if (maps == 0) {
 			temporary = e->map;
@@ -225,7 +225,7 @@ public:
 
 			}
 			cout << endl; 
-			cout << positionchanging << " positionchaning" << endl;
+			//cout << positionchanging << " positionchaning" << endl;
 			
 			//cout << "SHIP -1";
 			//return positionchanging; 
@@ -235,7 +235,7 @@ public:
 			positionchanging = -1; 
 
 		}
-		cout << "WE GET HERE";
+		//scout << "WE GET HERE";
 		int space = positionchanging;
 		for (int i = 0; i < needbig; i++) {
 			
