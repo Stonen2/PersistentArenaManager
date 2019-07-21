@@ -189,11 +189,14 @@ public:
 		bool flag = false;
 		bool flag2 = false; 
 		//int counter = 0; 
+		 cout << endl; 
+		 cout << temporary << "TEMP HERE" ; 
+		 cout << endl;
 		while (flag == false) {
 			for (int i = 0; i < 64; i++) {
 				positionchanging = i; 
 				for (int j = positionchanging; j < 64; j++) {
-					cout << temporary[j] << endl;
+					//cout << temporary[j] << endl;
 					if (counter == needbig){
 
 						flag = true;
@@ -205,25 +208,33 @@ public:
 					{
 							//Increment counter by 1
 						counter += 1;
-
+						cout << counter;
 					}
 					else {
 							//Reset the counter to 0
 						counter = 0;
-					}
-					if (flag2 == true) {
 						break;
 					}
-
 				}
+				if (flag2 == true) {
+					break;
+				}
+				
 
 				counter = 0;
 
 			}
-			cout << "SHIP -1";
-			return -1; 
+			cout << endl; 
+			cout << positionchanging << " positionchaning" << endl;
+			
+			//cout << "SHIP -1";
+			//return positionchanging; 
 		}
+		if (flag2 == false) {
 
+			positionchanging = -1; 
+
+		}
 		cout << "WE GET HERE";
 		int space = positionchanging;
 		for (int i = 0; i < needbig; i++) {
