@@ -15,7 +15,7 @@ using namespace std;
 
 template <class T>
 
-class MegaAlloc {
+class ultra {
 
 public:
 	//
@@ -108,30 +108,7 @@ public:
 	// If it has room we return true
 	//if not enough room to allocate then we return false 
 
-	bool hasroom(bitset<64> s, size_type big) {
-		string temp = "";
-		uint64_t forr = s;
-		string t = toBinary(forr);
-
-		for (int i = 0; i < big; i++) {
-
-			temp = temp + "0";
-
-
-		}
-		if (t.find(temp) == -1) {
-
-			return false;
-		}
-		return true;
-
-
-
-
-
-	}
-
-	bool checkroom(bitset<64> traverse, size_type big) {
+	bool checkroomsss(bitset<64> traverse, size_type big) {
 
 		bool flag = false;
 		size_type counter = 0; 
@@ -140,9 +117,10 @@ public:
 
 			for (int j = 0; j < i; j++) {
 
-				if (counter == big{
+				if (counter == big){
 
 					flag = true;
+					cout << "FOUND SIZE";
 					return flag;
 					}
 				if (traverse[j] == 0)
@@ -161,6 +139,7 @@ public:
 			counter = 0; 
 		
 		}
+		cout << "NO ROOM ";
 		//Traverse whole list and found nothing... Return false NO room to allocate
 		return flag;
 
@@ -177,10 +156,11 @@ public:
 	//And we return the position in the string that has the 0s
 	//If not then we return -1 meaning no room to allocate
 
-	size_type findholes(size_type needbig, Arena* e, int maps) {
-		uint64_t temporary;
-		string hold = "";
-		string nhold = "";
+	size_type changemap(size_type needbig, Arena* e, int maps) {
+		bitset<64> temporary;
+		size_type counter = 0;
+		int positionchanging = 0; 
+
 		if (maps == 0) {
 			temporary = e->map;
 		}
@@ -206,173 +186,103 @@ public:
 		else {
 			temporary = e->map7;
 		}
+		bool flag = false;
+		bool flag2 = false; 
+		//int counter = 0; 
+		while (flag == false) {
+			for (int i = 0; i < 64; i++) {
+				positionchanging = i; 
+				for (int j = positionchanging; j < 64; j++) {
+					cout << temporary[j] << endl;
+					if (counter == needbig){
 
+						flag = true;
+						flag2 = true; 
+						//i = 64; 
+						break;
+					}
+					else if (temporary[j] == 0)
+					{
+							//Increment counter by 1
+						counter += 1;
+
+					}
+					else {
+							//Reset the counter to 0
+						counter = 0;
+					}
+					if (flag2 == true) {
+						break;
+					}
+
+				}
+
+				counter = 0;
+
+			}
+			cout << "SHIP -1";
+			return -1; 
+		}
+
+		cout << "WE GET HERE";
+		int space = positionchanging;
 		for (int i = 0; i < needbig; i++) {
-			hold = hold + "0";
-			nhold = nhold + "1";
+			
+			temporary[space] = 1; 
+			space = space + 1; 
 		}
-		string s = toBinary(temporary);
-		if (s.find(hold) == -1) {
-			cout << "Not available";
-			return -1;
-		}
-		else {
-
-
-			size_type pos = s.find(hold);
-			cout << "POSITION FOUND AT " << pos;
-			cout << endl;
-			cout << nhold;
-			cout << endl;
-			s = s.replace(pos, needbig, nhold);
-			//Send String to be uint
+		cout << temporary;
+		//s = s.replace(pos, needbig, nhold);
+		//Send String to be uint
 				//Set map to be new uint
 			if (maps == 0) {
-				e->map = fromString(s);
+				e->map = temporary;
 			}
 			else if (maps == 1) {
-				e->map1 = fromString(s);
+				e->map1 = temporary;
 
 			}
 			else if (maps == 2) {
-				e->map2 = fromString(s);
+				e->map2 = temporary;
 
 			}
 			else if (maps == 3) {
-				e->map3 = fromString(s);
+				e->map3 = temporary;
 
 			}
 			else if (maps == 4) {
-				e->map4 = fromString(s);
+				e->map4 = temporary;
 			}
 			else if (maps == 5) {
-				e->map5 = fromString(s);
+				e->map5 = temporary;
 
 			}
 			else if (maps == 6) {
-				e->map6 = fromString(s);
+				e->map6 = temporary;
 
 			}
 			else {
-				e->map7 = fromString(s);
+				e->map7 = temporary;
 
 			}
 
-			return pos;
+			return positionchanging;
 
-		}
+		
 		//int pos = a.find(hold);
 		//cout << hold; 
 	}
 	//////////////////////////////////////////////////////////////////
-
-
-
-	size_type findholes(size_type needbig, Arena* e, int maps) {
-		bitset<64> temporary;
-		
-		//string hold = "";
-		//string nhold = "";
-		if (maps == 0) {
-			temporary = e->map;
-		}
-		else if (maps == 1) {
-			temporary = e->map1;
-		}
-		else if (maps == 2) {
-			temporary = e->map2;
-
-		}
-		else if (maps == 3) {
-			temporary = e->map3;
-		}
-		else if (maps == 4) {
-			temporary = e->map4;
-		}
-		else if (maps == 5) {
-			temporary = e->map5;
-		}
-		else if (maps == 6) {
-			temporary = e->map6;
-		}
-		else {
-			temporary = e->map7;
-		}
-
-		//Create the size we need
+	//Create the size we need
 		//check to see if any map has that many 0s
 		//Rewrite the new map 
-		
 
-		for (int i = 0; i < needbig; i++) {
-			hold = hold + "0";
-			nhold = nhold + "1";
-		}
-		string s = toBinary(temporary);
-		if (s.find(hold) == -1) {
-			cout << "Not available";
-			return -1;
-		}
-		else {
-
-
-			size_type pos = s.find(hold);
-			cout << "POSITION FOUND AT " << pos;
-			cout << endl;
-			cout << nhold;
-			cout << endl;
-			s = s.replace(pos, needbig, nhold);
-			//Send String to be uint
-				//Set map to be new uint
-			if (maps == 0) {
-				e->map = fromString(s);
-			}
-			else if (maps == 1) {
-				e->map1 = fromString(s);
-
-			}
-			else if (maps == 2) {
-				e->map2 = fromString(s);
-
-			}
-			else if (maps == 3) {
-				e->map3 = fromString(s);
-
-			}
-			else if (maps == 4) {
-				e->map4 = fromString(s);
-			}
-			else if (maps == 5) {
-				e->map5 = fromString(s);
-
-			}
-			else if (maps == 6) {
-				e->map6 = fromString(s);
-
-			}
-			else {
-				e->map7 = fromString(s);
-
-			}
-
-			return pos;
-
-		}
 		//int pos = a.find(hold);
 		//cout << hold; 
-	}
-
+	
 
 
 	////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
 
 
 	//This hub function serves as the main function that controls the overall allocation process that is used by this program 
@@ -383,8 +293,8 @@ public:
 
 		if (e->Arenasize == 64) {
 			//map 1
-			if (hasroom(e->map, needbig) == true) {
-				size_type s = findholes(needbig, e, 0);
+			if (checkroomsss(e->map, needbig) == true) {
+				size_type s = changemap(needbig, e, 0);
 				return lowlevelalloc(s, needbig, e->startarena);
 
 			}
@@ -396,14 +306,14 @@ public:
 		}
 		else if (e->Arenasize == 128) {
 
-			if (hasroom(e->map, needbig) == true) {
-				size_type s = findholes(needbig, e, 0);
+			if (checkroomsss(e->map, needbig) == true) {
+				size_type s = changemap(needbig, e, 0);
 				return lowlevelalloc(s, needbig, e->startarena);
 
 			}
-			else if (hasroom(e->map1, needbig) == true) {
+			else if (checkroomsss(e->map1, needbig) == true) {
 
-				size_type s = findholes(needbig, e, 1);
+				size_type s = changemap(needbig, e, 1);
 				return lowlevelalloc(s, needbig, e->startarena);
 			}
 			else {
@@ -417,24 +327,24 @@ public:
 		}
 		else if (e->Arenasize == 256) {
 			// 1 2 3 4 
-			if (hasroom(e->map, needbig) == true) {
-				size_type s = findholes(needbig, e, 0);
+			if (checkroomsss(e->map, needbig) == true) {
+				size_type s = changemap(needbig, e, 0);
 				return lowlevelalloc(s, needbig, e->startarena);
 				//Change the string and send back the position that the string starts at 
 				//Take the position the arena start, the size get the void star
 
 			}
-			else if (hasroom(e->map1, needbig) == true) {
+			else if (checkroomsss(e->map1, needbig) == true) {
 
-				size_type s = findholes(needbig, e, 1);
+				size_type s = changemap(needbig, e, 1);
 				return lowlevelalloc(s, needbig, e->startarena);
 			}
-			else if (hasroom(e->map2, needbig) == true) {
-				size_type s = findholes(needbig, e, 2);
+			else if (checkroomsss(e->map2, needbig) == true) {
+				size_type s = changemap(needbig, e, 2);
 				return lowlevelalloc(s, needbig, e->startarena);
 			}
-			else if (hasroom(e->map3, needbig) == true) {
-				size_type s = findholes(needbig, e, 3);
+			else if (checkroomsss(e->map3, needbig) == true) {
+				size_type s = changemap(needbig, e, 3);
 				return lowlevelalloc(s, needbig, e->startarena);
 			}
 
@@ -448,29 +358,29 @@ public:
 
 		}
 		else if (e->Arenasize == 512) {
-			if (hasroom(e->map, needbig) == true) {
-				size_type s = findholes(needbig, e, 0);
+			if (checkroomsss(e->map, needbig) == true) {
+				size_type s = changemap(needbig, e, 0);
 				return lowlevelalloc(s, needbig, e->startarena);
 			}
-			else if (hasroom(e->map1, needbig) == true) {
-				size_type s = findholes(needbig, e, 1);
+			else if (checkroomsss(e->map1, needbig) == true) {
+				size_type s = changemap(needbig, e, 1);
 				return lowlevelalloc(s, needbig, e->startarena);
 
 			}
-			else if (hasroom(e->map2, needbig) == true) {
-				size_type s = findholes(needbig, e, 2);
+			else if (checkroomsss(e->map2, needbig) == true) {
+				size_type s = changemap(needbig, e, 2);
 				return lowlevelalloc(s, needbig, e->startarena);
 			}
-			else if (hasroom(e->map3, needbig) == true) {
-				size_type s = findholes(needbig, e, 3);
+			else if (checkroomsss(e->map3, needbig) == true) {
+				size_type s = changemap(needbig, e, 3);
 				return lowlevelalloc(s, needbig, e->startarena);
 			}
-			else if (hasroom(e->map4, needbig) == true) {
-				size_type s = findholes(needbig, e, 4);
+			else if (checkroomsss(e->map4, needbig) == true) {
+				size_type s = changemap(needbig, e, 4);
 				return lowlevelalloc(s, needbig, e->startarena);
 			}
-			else if (hasroom(e->map5, needbig) == true) {
-				size_type s = findholes(needbig, e, 5);
+			else if (checkroomsss(e->map5, needbig) == true) {
+				size_type s = changemap(needbig, e, 5);
 				return lowlevelalloc(s, needbig, e->startarena);
 			}
 			else {
@@ -485,38 +395,38 @@ public:
 			// 1 2 3 4 5 6 
 		}
 		else if (e->Arenasize == 1024) {
-			if (hasroom(e->map, needbig) == true) {
-				size_type s = findholes(needbig, e, 0);
+			if (checkroomsss(e->map, needbig) == true) {
+				size_type s = changemap(needbig, e, 0);
 				return lowlevelalloc(s, needbig, e->startarena);
 
 			}
-			else if (hasroom(e->map1, needbig) == true) {
-				size_type s = findholes(needbig, e, 1);
+			else if (checkroomsss(e->map1, needbig) == true) {
+				size_type s = changemap(needbig, e, 1);
 				return lowlevelalloc(s, needbig, e->startarena);
 
 			}
-			else if (hasroom(e->map2, needbig) == true) {
-				size_type s = findholes(needbig, e, 2);
+			else if (checkroomsss(e->map2, needbig) == true) {
+				size_type s = changemap(needbig, e, 2);
 				return lowlevelalloc(s, needbig, e->startarena);
 			}
-			else if (hasroom(e->map3, needbig) == true) {
-				size_type s = findholes(needbig, e, 3);
+			else if (checkroomsss(e->map3, needbig) == true) {
+				size_type s = changemap(needbig, e, 3);
 				return lowlevelalloc(s, needbig, e->startarena);
 			}
-			else if (hasroom(e->map4, needbig) == true) {
-				size_type s = findholes(needbig, e, 4);
+			else if (checkroomsss(e->map4, needbig) == true) {
+				size_type s = changemap(needbig, e, 4);
 				return lowlevelalloc(s, needbig, e->startarena);
 			}
-			else if (hasroom(e->map5, needbig) == true) {
-				size_type s = findholes(needbig, e, 5);
+			else if (checkroomsss(e->map5, needbig) == true) {
+				size_type s = changemap(needbig, e, 5);
 				return lowlevelalloc(s, needbig, e->startarena);
 			}
-			else if (hasroom(e->map6, needbig) == true) {
-				size_type s = findholes(needbig, e, 6);
+			else if (checkroomsss(e->map6, needbig) == true) {
+				size_type s = changemap(needbig, e, 6);
 				return lowlevelalloc(s, needbig, e->startarena);
 			}
-			else if (hasroom(e->map7, needbig) == true) {
-				size_type s = findholes(needbig, e, 7);
+			else if (checkroomsss(e->map7, needbig) == true) {
+				size_type s = changemap(needbig, e, 7);
 				return lowlevelalloc(s, needbig, e->startarena);
 			}
 			else {
@@ -663,7 +573,7 @@ public:
 
 	//First block is size 64 byte 
 	//We start with no arenas and wait for the user to request memory before we alloate
-	MegaAlloc()
+	ultra()
 	{
 		numarenas = 0;
 		HeapSize = 64;
@@ -678,7 +588,7 @@ public:
 
 
 
-	~MegaAlloc()
+	~ultra()
 	{
 
 
@@ -716,7 +626,7 @@ public:
 			cout << temp->map << " " << endl;
 			cout << endl;
 
-			cout << toBinary(temp->map) << " TO binary" << endl;
+			//cout << toBinary(temp->map) << " TO binary" << endl;
 			cout << endl;
 			//cout << count << endl; 
 			//cout << endl; 
@@ -738,42 +648,6 @@ public:
 		e->map5 = 0;
 		e->map6 = 0;
 		e->map7 = 0;
-	}
-
-
-
-
-	//We take in a none string in the form of a 
-	string toBinary(const T& t)
-	{
-		string s = "";
-		uint64_t n = sizeof(T) * 8;
-		for (int i = n; i >= 0; i--)
-		{
-			s += (t & (1 << i)) ? "1" : "0";
-		}
-		return s;
-	}
-
-
-	//We take in a string and we want to turn the string back into a Uint64_t
-	//This is used in the process of changing and altering the bit map that each individual node holds. 
-
-	uint64_t fromString(string binaryString) {
-		uint64_t value = 0;
-		int indexCounter = 0;
-		for (int i = binaryString.length() - 1; i >= 0; i--)
-		{
-
-			if (binaryString[i] == '1')
-			{
-				value += pow(2, indexCounter);
-			}
-			indexCounter++;
-		}
-		return value;
-
-
 	}
 
 

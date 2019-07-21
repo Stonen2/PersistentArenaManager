@@ -1,6 +1,6 @@
 #include <iostream>
 #include "MegaAlloc.h"
-//#include "ultra.h"
+#include "ultra.h"
 #include <conio.h> //for getch()
 #include <string>
 #include <cmath>
@@ -80,10 +80,18 @@ int main() {
 
 
 
+	int fff = 10; 
 
+	ultra<int> u; 
 
-	//ultra<int> u; 
-
+	void * trip = u.bitallocate(sizeof(fff));
+	
+	cout << endl; 
+	cout << trip; 
+	cout << endl; 
+	cout << endl; 
+	u.print();
+	cout << endl;
 
 	//u.allocate();
 	//u.allocate();
