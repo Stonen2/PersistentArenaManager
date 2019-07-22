@@ -28,17 +28,6 @@ public:
 	//These variables will be used for allocating the memory IE void * commonly used
 	using size_type = size_t;
 	using void_star = void*;
-
-
-
-private:
-	//The number of allocations that occur in a given 
-	int count = 0;
-	//Each of these structs is used to form a simple linked list data structure
-	//Each Arena is a given size of memory and points to the next arena in the list
-	//Each arena also holds a size of the arena since this is dynamic as well as the location of the arena
-	//Each arena is also capable of holding up to a certain number of 64 bit maps.. This detail can easily be changed
-	//However the complications of bitset * and using 64 bit pointers makes freeing memory Non-Trivial
 	struct Arena {
 		//Where the next arena is stored in the list 
 		struct Arena* next;
@@ -50,8 +39,19 @@ private:
 		atomic_flag lock;
 		//Needs to hold a number of bitsets ptrs equal to the bytes that each region holds 
 		//For only 64 bytes
-		pointer bitset; 
+		int* bitset;
 	};
+
+
+private:
+	//The number of allocations that occur in a given 
+	int count = 0;
+	//Each of these structs is used to form a simple linked list data structure
+	//Each Arena is a given size of memory and points to the next arena in the list
+	//Each arena also holds a size of the arena since this is dynamic as well as the location of the arena
+	//Each arena is also capable of holding up to a certain number of 64 bit maps.. This detail can easily be changed
+	//However the complications of bitset * and using 64 bit pointers makes freeing memory Non-Trivial
+
 	//For the overall program
 	void_star start;
 	//size_type nextArenaBlock;
@@ -261,7 +261,8 @@ public:
 	//We then make sure that the arena has enough room to allocate the given memory that has been input by the programmer
 	void_star bitallocate(size_type needbig) {
 		while (1) {
-			if (mut.try_lock()) {
+			lock_guard <mutex> lock(mut);
+			//if (mut.try_lock()) {
 				bool memoryallocated = false;
 				while (memoryallocated == false) {
 					if (Head_Arena == NULL) {
@@ -277,7 +278,6 @@ public:
 								temp = temp->next;
 							}
 							else {
-								mut.unlock();
 								return store;
 								//Success!
 							}
@@ -287,19 +287,19 @@ public:
 						}
 					}
 				}
-			}
+			//}
 		}
 	}
 	Arena* arenainfo(Arena* temp) {
 		//Arenasize  =chunk /2
 		//startarena = temp
-		temp->Arenasize = chunk / 2;
+		temp->Arenasize = (chunk / 2);
 		cout << temp->Arenasize; 
 		temp->startarena = temp;
 		temp->bitset = new int[temp ->Arenasize];
 		// traverse through array and print each element
-		for (int i = 0; i <= temp->Arenasize; ++i) {
-			
+		for (int i = 0; i < temp->Arenasize; ++i) {
+		
 			temp->bitset[i] = 0;
 		}
 		return temp;
@@ -361,24 +361,26 @@ public:
 	}
 	~superultra()
 	{
+	
 		Arena* temp = Head_Arena;
-		Arena * temps = temp; 
+		Arena* temps = temp;
 		if (Head_Arena != NULL) {
-			delete(Head_Arena->bitset);
+			delete(Head_Arena);
 			if (Head_Arena->next != NULL) {
-				temp = Head_Arena->next; 
+				temp = Head_Arena->next;
 				delete(Head_Arena);
 				while (temp != NULL) {
 					delete(temp->bitset);
-					temps = temp; 
-					temp = temp->next; 
+					temps = temp;
+					temp = temp->next;
 					delete(temps);
 				}
 			}
-			else {
-				delete(Head_Arena);
-			}
+
 		}
+
+
+
 	}
 
 
@@ -400,8 +402,9 @@ public:
 			cout << endl;
 			// traverse through array and print each element
 			cout << endl; 
-			for (int i = temp->Arenasize; i >= 0; --i) {
+			for (int i = temp->Arenasize-1; i >= 0; --i) {
 				cout << temp->bitset[i];
+				
 			}
 			cout << endl;
 			temp = temp->next;
@@ -458,12 +461,6 @@ public:
 			}
 		}
 	}
-
-	
-
-
-
-
 
 };
 

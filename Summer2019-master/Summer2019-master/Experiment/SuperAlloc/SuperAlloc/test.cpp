@@ -10,6 +10,7 @@ using namespace std;
 
 
 int main() {
+	/*
 	MegaAlloc<int> s; 
 	int a = 19;
 	int b = 200; 
@@ -52,6 +53,7 @@ int main() {
 	cout << "-------------------------" << endl; 
 	cout << endl; 
 	cout << endl; 
+	*/
 	superultra<int> su; 
 	cout << "SRART SU SHOULD HAVE 1 ARENA" << endl;
 	int just = 10; 
@@ -62,6 +64,7 @@ int main() {
 	int juts = 10;
 	int jutss = 10;
 	int jutsss = 10;
+	
 	size_t ff = 10; 
 	size_t fff = 10;
 	size_t ffff = 64; 
@@ -78,13 +81,34 @@ int main() {
 	su.bitallocate(fff);
 	su.bitallocate(ffff);
 	su.bitallocate(lfs);
+	
 	void* tes = su.gethead();
+	
 	su.deallocate(tes);
 	su.bitallocate(10);
+	
+	
+	cout << endl;
+	cout << endl;
+	//superultra<int> su;
+	cout << "SRART SU SHOULD HAVE 1 ARENA" << endl;
+	//su.allocate();
 	cout << endl;
 	su.recovery();
 	cout << endl; 
 	su.print();
 	cout << endl << "FINISH";
+	
+	/*
+	int* p; 
+	int *t = new int[10];
+	for (int i = 0; i < 22; i++) {
+
+		cout << t[i];
+	}
+	*/
+
+
+	
 	return 0;  
 }
