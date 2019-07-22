@@ -100,14 +100,6 @@ int main() {
 	//forfucks = (uint64_t)bitset1; 
 
 
-
-
-
-
-
-
-
-
 	cout << endl << "FINISH";
 
 

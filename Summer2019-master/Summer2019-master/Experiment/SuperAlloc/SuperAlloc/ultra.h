@@ -4,11 +4,10 @@
 #include <cstddef>
 #include <stdlib.h>
 #include <atomic>
-#include <string>
 #include <cstdint>
-#include <cmath>
 #include <bitset>
-
+#include <thread>
+#include <mutex>
 using namespace std;
 
 
@@ -19,6 +18,7 @@ class ultra {
 
 public:
 	//
+	mutex mut; 
 	using value_type = T;
 	using pointer = T *;
 	using const_pointer = const T*;
@@ -241,7 +241,7 @@ public:
 			temporary[space] = 1; 
 			space = space + 1; 
 		}
-		cout << temporary;
+		//cout << temporary;
 		//s = s.replace(pos, needbig, nhold);
 		//Send String to be uint
 				//Set map to be new uint
@@ -469,32 +469,35 @@ public:
 	//We then make sure that the arena has enough room to allocate the given memory that has been input by the programmer
 
 	void_star bitallocate(size_type needbig) {
-		bool memoryallocated = false;
+		if (mut.try_lock()) {
+			bool memoryallocated = false;
 
-		while (memoryallocated == false) {
-			if (Head_Arena == NULL) {
-				allocate();
-
-			}
-			else {
-				//Traverse all arenas and find a suitable place
-				Arena* temp = Head_Arena;
-				while (temp != NULL) {
-					void_star store = hub(temp, needbig);
-					if (store == NULL) {
-						//Failed
-						temp = temp->next;
-
-					}
-					else {
-						return store;
-						//Success!
-
-					}
+			while (memoryallocated == false) {
+				if (Head_Arena == NULL) {
+					allocate();
 
 				}
-				if (memoryallocated == false) {
-					allocate();
+				else {
+					//Traverse all arenas and find a suitable place
+					Arena* temp = Head_Arena;
+					while (temp != NULL) {
+						void_star store = hub(temp, needbig);
+						if (store == NULL) {
+							//Failed
+							temp = temp->next;
+
+						}
+						else {
+							mut.unlock();
+							return store;
+							//Success!
+
+						}
+
+					}
+					if (memoryallocated == false) {
+						allocate();
+					}
 				}
 			}
 		}
