@@ -10,7 +10,9 @@
 #include <mutex>
 using namespace std;
 
-
+//Creating A memory allocator that uses arena allocation methods
+//This is done through a bit map of x bytes such that it is a multiple of 64 bits
+//Each allocation doubles in size 
 
 template <class T>
 
@@ -18,9 +20,8 @@ class superultra {
 
 public:
 	//Using mutex locks in order to start with the easiest concurrency
-
+	//End up using lock guard for spin lock 
 	mutex mut;
-
 	//Template variables Starting with the values that are supposed to be held by the class
 	using value_type = T;
 	using pointer = T *;
@@ -28,6 +29,10 @@ public:
 	//These variables will be used for allocating the memory IE void * commonly used
 	using size_type = size_t;
 	using void_star = void*;
+	//This struct is used to create a singly linked list that holds meta data for memory allocations
+	//Each of these structs is used to form a simple linked list data structure
+	//Each Arena is a given size of memory and points to the next arena in the list
+	//Each arena also holds a size of the arena since this is dynamic as well as the location of the arena
 	struct Arena {
 		//Where the next arena is stored in the list 
 		struct Arena* next;
@@ -37,8 +42,7 @@ public:
 		void_star startarena;
 		//Not used yet but will be for accessing nodes... Concurrency
 		atomic_flag lock;
-		//Needs to hold a number of bitsets ptrs equal to the bytes that each region holds 
-		//For only 64 bytes
+		//This is a dynamic sized array that holds 0s and 1s
 		int* bitset;
 	};
 
@@ -46,16 +50,8 @@ public:
 private:
 	//The number of allocations that occur in a given 
 	int count = 0;
-	//Each of these structs is used to form a simple linked list data structure
-	//Each Arena is a given size of memory and points to the next arena in the list
-	//Each arena also holds a size of the arena since this is dynamic as well as the location of the arena
-	//Each arena is also capable of holding up to a certain number of 64 bit maps.. This detail can easily be changed
-	//However the complications of bitset * and using 64 bit pointers makes freeing memory Non-Trivial
-
-	//For the overall program
+	//start location For the overall program
 	void_star start;
-	//size_type nextArenaBlock;
-	//static size_type numallocs;
 	//Number of arenas in the list how many nodes are here and active
 	int numarenas;
 	//The size of the next block of memory ready to be allocated
@@ -94,7 +90,7 @@ public:
 	void_star malloc() {
 
 		//Take in no parameters
-		//Create a new void star that points to the first position and adds the size to the void pointer
+		//Create a new void star that points to the first position and adds the size of the arena to the void pointer
 		//THen we increment the global counters and chunk for the next allocation to happen
 		//Return the new pointer that is pointing to the new arena
 		void_star retval = &start + chunk;
@@ -123,24 +119,19 @@ public:
 
 	}
 
-	//We take in the bit map from an arena and the size of the object that is trying to be allocated to the given region
-	//we turn the bit map into a binary string and then check that string to make sure that it has a given number of 0s
-	//in a row that will allow for an object to be allocated
-	// If it has room we return true
-	//if not enough room to allocate then we return false 
-	//////////////////////////////////////////////////////////////////
-	//Create the size we need
-		//check to see if any map has that many 0s
-	////////////////////////////////////////////////////////////////////
-	//Has Room
-	////////////////////////////////////////////////////////////////////
+
+/*
+	This function takes in a given arena and the size of an object that needs to be allocated. Then We search the bit map
+	to the corresponding arena that we take in and check to see if there is enough room to allocate the new object
+	If yes we return else false
+*/
 
 	bool checkroom(Arena * temp, size_type big) {
 		//Set a flag and a counter to be false and 0
 		bool flag = false;
 		size_type counter = 0;
 		//A double for loop in order to iterate through the bit map 
-		//We know the given bitmap size is 64
+		//We know the given bitmap size is Arena size
 		for (int i = 0; i <= temp->Arenasize; i++) {
 
 			//This inner loop is to check that there are enough positions in the list in order to allocate 
@@ -182,17 +173,20 @@ public:
 	//Swap 0s to 1s
 	//////////////////////////////////////////////////////////////////////
 
-	//This is designed to test a given map that belongs in a given arena
-	//However we know that some arenas of smaller size may only need 1 map to represent them 
-	//So we then take in a size of the object that needs to be allocated
-	//Then we create a string that contains the number os 0s needed to allocate
-	//Then if it has enough room then we update the string and send it back 
-	//And we return the position in the string that has the 0s
-	//If not then we return -1 meaning no room to allocate
-
+/*
+This function takes in an arena and a size that needs to be allocated. Just like the function above this checks the arena bitmap to see 
+if there is enough room to allocate the new object. If yes we track the position in the bit map that the object will be allocated in order
+to offset the void star in the low level allocation and we set the bit map to be updated with 1s in the proper positions
+Remember that 1 will occur in the sequential number of spots equal to the size of the object
+*/
 	size_type changeset(size_type needbig, Arena* e) {
+		//// Set counter and position to 0... Counter is for the number of spots in the bit map 
+		//The position is the overall position of the next free size
 		size_type counter = 0;
 		size_type positionchanging = 0;
+		//Set a doube flag to both be false
+		//Flag 1 ensures that we iterate through the entire bit map
+		//Flag 2 ensures that there is enough room to allocate
 		bool flag = false;
 		bool flag2 = false;
 		while (flag == false) {
@@ -200,7 +194,7 @@ public:
 				positionchanging = i;
 				for (int j = positionchanging; j <= e->Arenasize; j++) {
 					if (counter == needbig) {
-
+						//There is enoguh room quit the loops you are dones
 						flag = true;
 						flag2 = true;
 						break;
@@ -216,31 +210,36 @@ public:
 						break;
 					}
 				}
+				//YOu have found the position quit the program
 				if (flag2 == true) {
 					break;
 				}
 				counter = 0;
 			}
 		}
+		//Never found enough room 
 		if (flag2 == false) {
 
 			positionchanging = -1;
 
 		}
+
+		//Loop through and change the correct spots in the array to be 1s
 		int space = positionchanging;
 		for (int i = 0; i < needbig; i++) {
 
 			e->bitset[space] = 1;
 			space = space + 1;
 		}
+		//Return the position to be allocated
 		return positionchanging;
 	}
 
 	//////////////////////////////////////////////////////////////////////
 
 	//This hub function serves as the main function that controls the overall allocation process that is used by this program 
-	// We first check the arena size then based on the arena size we know how many maps need to be checked to see if therre is proper room
-	//To be allocated... If there is no room to be allocated we return null. 
+	//We first check to make sure that the arena has enough room to allocate memory If Not we return false otherwise 
+	//We call low level alloc and we return the new void * back to the calling program 
 
 	void_star hub(Arena* e, size_type needbig) {
 
@@ -264,7 +263,9 @@ public:
 			lock_guard <mutex> lock(mut);
 			//if (mut.try_lock()) {
 				bool memoryallocated = false;
+				//We NEED to allocate memory, Continue until memory is allocated
 				while (memoryallocated == false) {
+					//No Arenas ... Make an arena
 					if (Head_Arena == NULL) {
 						allocate();
 					}
@@ -282,6 +283,7 @@ public:
 								//Success!
 							}
 						}
+						//Need another new arena
 						if (memoryallocated == false) {
 							allocate();
 						}
@@ -290,21 +292,27 @@ public:
 			//}
 		}
 	}
+	//Take in a struct and set ALL the values inside the struct
 	Arena* arenainfo(Arena* temp) {
 		//Arenasize  =chunk /2
 		//startarena = temp
 		temp->Arenasize = (chunk / 2);
-		cout << temp->Arenasize; 
+		//cout << temp->Arenasize; 
 		temp->startarena = temp;
 		temp->bitset = new int[temp ->Arenasize];
-		// traverse through array and print each element
+		// traverse through array and set each element to 0
 		for (int i = 0; i < temp->Arenasize; ++i) {
 		
 			temp->bitset[i] = 0;
 		}
+		//Return the updated Arena
 		return temp;
 	}
 
+
+	//We use this function as the main function for creating and maintainning our linked list structure
+	//This program is the ONLY program that calls malloc and that malloc belongs to an individual arena
+	//Thus meaning that a large allocation should be maintained and kept up by the Arena Struct it belongs too
 	void allocate() {
 		
 			//numallocations += 1; 
@@ -328,11 +336,15 @@ public:
 				Next_Arena = Head_Arena->next;
 			}
 			else if (Head_Arena->next == NULL) {
-
+				//Temp Arena 
+				
 				Arena* te;
+				//Allocate this new temp to be the malloc 
 				te = reinterpret_cast<Arena*>(malloc());
 				//te->startarena = te; 
+				//Set Arena values
 				te = arenainfo(te);
+				//Place it in the list 
 				Head_Arena->next = te;
 
 			}
@@ -344,8 +356,11 @@ public:
 					//Get to the last Node
 					Next_Arena = Next_Arena->next;
 				}
+				//Once at end of list insert new node into list
 				he = reinterpret_cast<Arena*>(malloc());
+				//Set values of the new arena
 				he = arenainfo(he);
+				//Make sure it is in the list 
 				Next_Arena->next = he;
 			}
 			//Function DOne
@@ -361,6 +376,9 @@ public:
 		Head_Arena = NULL;
 		Next_Arena = NULL;
 	}
+
+	//Every destructor I write breaks the program/
+	//Will wait for further instruction
 	~superultra()
 	{
 	
@@ -398,7 +416,7 @@ public:
 		}
 	}
 
-	//Set every value each 64 bit pointer to be 0
+	//Set every value in the bitmap to 0
 	//THis will allow the algorithm to revisit pointers
 	//and reallocate all of the values
 	void free(Arena* e) {
@@ -407,9 +425,13 @@ public:
 			e->bitset[i] =0;
 		}
 	}
-	//Function designed to take in a mega allocator and reconstruct the bit map 
+	//Function designed to take in a superultra allocator and reconstruct the bit map 
 
 	void recovery() {
+		//Set a void star to equal the start of the original program
+		//Then offset with 64 size and then check to see if a Arena exists.
+		//If so THen we have found an old arena!
+		//Else there was no arena in that location
 		void_star test = Head_Arena -> startarena;
 		size_type hit = 64; 
 		void_star lets = &test + hit; 
@@ -420,12 +442,15 @@ public:
 
 
 		}
+		//WE found a node
 		else 
 		{
+			//Set the hit to be chunk size
 			cout << "We have a Node hit";
 			hit = hit * 2; 
 			
 			bool recover = true; 
+			//Keep finding Nodes and offsetting the chunk value 
 			while (recover == true) {
 				lets = &lets + hit;
 				cout << lets << "THIS VALUE"<< endl;
@@ -434,11 +459,12 @@ public:
 				cout << endl; 
 				Arena* st = (Arena*)lets;
 				if (st->bitset  == NULL) {
-					
+					//No Node
 					recover = false; 
 
 				}
 				else {
+					//NODE!
 					hit = hit * 2; 
 					cout << "NODE";
 					//cout << lets; 
