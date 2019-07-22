@@ -6,6 +6,7 @@
 #include <cmath>
 #include <bitset>
 #include "superultra.h"
+#include <thread>
 using namespace std; 
 
 
@@ -64,6 +65,28 @@ int main() {
 	int juts = 10;
 	int jutss = 10;
 	int jutsss = 10;
+	//su.allocate();
+	
+
+	//thread t1(su.allocate());
+	//t1.join();
+	//thread t2(su.bitallocate(sizeof(juts)));
+	//thread t3(su.bitallocate(sizeof(jutss)));
+	/*
+	std::thread t(&superultra<int>::allocate, &su);
+	t.join();
+	std::thread t1(&superultra<int>::allocate, &su);
+	t1.join();
+	std::thread t2(&superultra<int>::allocate, &su);
+	t2.join();
+	*/
+
+
+	cout << endl; 
+	cout << endl; 
+	cout << endl; 
+	su.print();
+
 	
 	size_t ff = 10; 
 	size_t fff = 10;
@@ -92,13 +115,22 @@ int main() {
 	cout << endl;
 	//superultra<int> su;
 	cout << "SRART SU SHOULD HAVE 1 ARENA" << endl;
+	su.allocate();
 	//su.allocate();
 	cout << endl;
 	su.recovery();
 	cout << endl; 
 	su.print();
 	cout << endl << "FINISH";
-	
+	//su.allocate();
+	cout << endl; 
+	cout << endl;
+	//su.print();
+
+
+	cout << "WE ARE DONE";
+
+
 	/*
 	int* p; 
 	int *t = new int[10];

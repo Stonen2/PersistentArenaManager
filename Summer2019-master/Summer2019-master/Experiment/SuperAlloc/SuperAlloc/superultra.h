@@ -306,49 +306,51 @@ public:
 	}
 
 	void allocate() {
-		//numallocations += 1; 
-		numarenas = numarenas + 1;
-		//0 Elements;
-		if (Head_Arena == NULL) {
-			Arena* e;
-			e = reinterpret_cast<Arena*>(malloc());
+		
+			//numallocations += 1; 
+			numarenas = numarenas + 1;
+			//0 Elements;
+			if (Head_Arena == NULL) {
+				Arena* e;
+				e = reinterpret_cast<Arena*>(malloc());
 
-			//Set all of Node values in e; 
-			//SEt head Node to E; 
-			e = arenainfo(e);
-			//SEt Tail Not to HeadNode -> next
-			Head_Arena = e;
-			Head_Arena->next = NULL;
-			start = Head_Arena;
-			/*
-			Call Functions to Establish Node
-			*/
-			//Head Node Now E
-			Next_Arena = Head_Arena->next;
-		}
-		else if (Head_Arena->next == NULL) {
-
-			Arena* te;
-			te = reinterpret_cast<Arena*>(malloc());
-			//te->startarena = te; 
-			te = arenainfo(te);
-			Head_Arena->next = te;
-
-		}
-		else {
-			//Arena* temp; 
-			Arena* he;
-			Next_Arena = Head_Arena;
-			while (Next_Arena->next != NULL) {
-				//Get to the last Node
-				Next_Arena = Next_Arena->next;
+				//Set all of Node values in e; 
+				//SEt head Node to E; 
+				e = arenainfo(e);
+				//SEt Tail Not to HeadNode -> next
+				Head_Arena = e;
+				Head_Arena->next = NULL;
+				start = Head_Arena;
+				/*
+				Call Functions to Establish Node
+				*/
+				//Head Node Now E
+				Next_Arena = Head_Arena->next;
 			}
-			he = reinterpret_cast<Arena*>(malloc());
-			he = arenainfo(he);
-			Next_Arena->next = he;
+			else if (Head_Arena->next == NULL) {
+
+				Arena* te;
+				te = reinterpret_cast<Arena*>(malloc());
+				//te->startarena = te; 
+				te = arenainfo(te);
+				Head_Arena->next = te;
+
+			}
+			else {
+				//Arena* temp; 
+				Arena* he;
+				Next_Arena = Head_Arena;
+				while (Next_Arena->next != NULL) {
+					//Get to the last Node
+					Next_Arena = Next_Arena->next;
+				}
+				he = reinterpret_cast<Arena*>(malloc());
+				he = arenainfo(he);
+				Next_Arena->next = he;
+			}
+			//Function DOne
 		}
-	//Function DOne
-	}
+	
 	//First block is size 64 byte 
 	//We start with no arenas and wait for the user to request memory before we alloate
 	superultra()
@@ -362,22 +364,7 @@ public:
 	~superultra()
 	{
 	
-		Arena* temp = Head_Arena;
-		Arena* temps = temp;
-		if (Head_Arena != NULL) {
-			delete(Head_Arena);
-			if (Head_Arena->next != NULL) {
-				temp = Head_Arena->next;
-				delete(Head_Arena);
-				while (temp != NULL) {
-					delete(temp->bitset);
-					temps = temp;
-					temp = temp->next;
-					delete(temps);
-				}
-			}
-
-		}
+		
 
 
 
