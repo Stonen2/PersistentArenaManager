@@ -97,7 +97,6 @@ public:
 	void_star lowlevelalloc(size_type posstart, size_type thisbig, void_star arenast) {
 
 		void_star newplace = &arenast + posstart + thisbig;
-
 		return newplace;
 
 	}
@@ -189,9 +188,9 @@ public:
 		bool flag = false;
 		bool flag2 = false; 
 		//int counter = 0; 
-		 cout << endl; 
-		 cout << temporary << "TEMP HERE" ; 
-		 cout << endl;
+		 //cout << endl; 
+		// cout << temporary << "TEMP HERE" ; 
+		// cout << endl;
 		while (flag == false) {
 			for (int i = 0; i < 64; i++) {
 				positionchanging = i; 
@@ -305,11 +304,18 @@ public:
 		if (e->Arenasize == 64) {
 			//map 1
 			if (checkroomsss(e->map, needbig) == true) {
+				
 				size_type s = changemap(needbig, e, 0);
+				cout << endl; 
+				cout << endl; 
+				cout << "THIS IS THE S VAR" << endl; 
+				cout << s;
 				return lowlevelalloc(s, needbig, e->startarena);
 
 			}
 			else {
+				cout << endl; 
+				cout << 'NULL'; 
 
 				return NULL;
 			}
