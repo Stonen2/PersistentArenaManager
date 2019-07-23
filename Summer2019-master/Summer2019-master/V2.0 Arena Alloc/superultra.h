@@ -10,14 +10,45 @@
 #include <mutex>
 using namespace std;
 
+#if 0
+
+class BaseArena{
+  // this would have common fields of arenas, such as size?
+  int numbits;
+  int chunksize;
+  // ...
+};
+
+template<int NUMBITS, int CHUNKSIZE>
+class Arena : public BaseArena {
+  // this would have the bitmap, and the logic for atomically setting/clearing bits
+  atomic<uint64_t> bits[NUMBITS/(8*sizeof(uint64_t))];
+  char* chunks[NUMBITS*CHUNKSIZE];
+};
+#endif
+
 //Creating A memory allocator that uses arena allocation methods
 //This is done through a bit map of x bytes such that it is a multiple of 64 bits
 //Each allocation doubles in size 
 
-template <class T>
-
-class superultra {
-
+/// [nas] Rename from superultra to PersistentArenaManager
+///
+/// The PersistentArenaManager is a programmer-visible object that provides the ability to
+/// carve out regions from a mmap'd file and use them as if they were the return value from
+/// calls to malloc().  PersistentArenaManager also supports free().
+///
+/// The api consists of four functions:
+/// - init(void* base, size_t offset): init() receives a previously mmap'd region of memory 
+///   and its maximum size.  It finds the allocator within that region, initializes this 
+///   PersistentArenaManager from that allocator, and prepares to serve future allocation
+///   and free requests.
+/// - destroy(): currently a no-op, but part of the API in case we ever decide that init() 
+///   should be responsible for calling mmap... in that case, destroy() would call munmap()
+/// - get_mem(size_t): rounds the given size up to the next size class, finds (or creates)
+///   an arena that has a free block of that size, and reserves / returns that block
+/// - return_mem(void*): Determines the arena from which the provided pointer was allocated,
+///   and returns that pointer to the arena.
+template <class T> class superultra {
 public:
 	//Using mutex locks in order to start with the easiest concurrency
 	//End up using lock guard for spin lock 
@@ -33,38 +64,58 @@ public:
 	//Each of these structs is used to form a simple linked list data structure
 	//Each Arena is a given size of memory and points to the next arena in the list
 	//Each arena also holds a size of the arena since this is dynamic as well as the location of the arena
+	// [nas] switch to triple comments
+	// [nas] it would help to have a picture of the structure here, and to increase locality if possible 
+	//       by putting the bitset in the Arena.  That will require some ugly var-sized work.
+	/// An Arena is a contiguous region of persistent memory, wholly contained within the bounds
+	/// of the region with which the PersistentArenaManager was initialized.  It consists of a bitmap
+	/// for tracking free blocks, an array of blocks, and other metadata.
 	struct Arena {
 		//Where the next arena is stored in the list 
 		struct Arena* next;
 		//The size of the arena... 64 128 256 ....
+		// [nas] This is also actually the field that indicates the /type/ of the Arena.
 		size_type Arenasize;
 		//Location of where the arena starts this is used for allocating and sectioning off memory 
+		// [nas] Switch to char* for easier pointer arithmetic?
 		void_star startarena;
 		//Not used yet but will be for accessing nodes... Concurrency
 		atomic_flag lock;
 		//This is a dynamic sized array that holds 0s and 1s
+		// [nas] Consider fixed-size array of atomic uint64_ts?
 		int* bitset;
+		// [nas] Maybe all Arenas should be templated by size class, and inherit from a common base?
 	};
 
 
 private:
 	//The number of allocations that occur in a given 
+	// [nas] Probably not needed?!?
 	int count = 0;
 	//start location For the overall program
+	// [nas] By our definition above, this is /base/
 	void_star start;
 	//Number of arenas in the list how many nodes are here and active
+	// [nas] probably not needed
 	int numarenas;
 	//The size of the next block of memory ready to be allocated
+	// [nas] Probably going away
 	size_type chunk;
 	//MALLOC
 	//WHat is the total size we have allocated
+	// [nas] Probably need two things here.  One is the /offset/ passed to init().  The other is
+	//       the offset to reach the un-allocated portion of the region.
 	size_type HeapSize;
 	//Size of the region we are going to allocate next
+	// [nas] probably goes away
 	size_type nexts;
 	//MALLOC
 	//Where the start of the arena is goingto be
+	// [nas] There are many options for how to do this, because there could be one arena list or 
+	//       many, possibly segregated by size or organized in circular lists.
 	Arena* Head_Arena;
 	//Location of the next node that needs to be created
+	// [nas] subsumed by the two offsets above
 	Arena* Next_Arena;
 	//For the self referential Bit map 
 
@@ -87,6 +138,7 @@ public:
 	//Thus meaning that everytime we allocate we set our chunk size or the amount of memory that we are allocating
 	//To be chunk * 2 or to appear in 64 bits then 128 bits then 256 bits then 512.... etc. 
 
+	// [nas] should take a size_t
 	void_star malloc() {
 
 		//Take in no parameters
@@ -476,5 +528,3 @@ Remember that 1 will occur in the sequential number of spots equal to the size o
 	}
 
 };
-
-
