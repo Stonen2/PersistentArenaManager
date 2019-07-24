@@ -81,6 +81,7 @@ class Arena : public BaseArena {
 	Arena* next; 
 	int totalsizechu = NUMBITS * CHUNKSIZE; 
 	int totalsizeui = (NUMBITS / (8 * sizeof(uint64_t)));
+	int numchunkperbit = NUMBITS / (8 * sizeof(uint64_t));
 
 public:
 	///On creation we want to take in a void * that will be given to us by the malloc returned in the parent program IE Persistent Arena Manager
@@ -120,41 +121,52 @@ public:
 		return false; 
 	}
 	///Take in a size and a number in the array pointer then we check i
-	bool checkroombits(size_t s,int num) {
+	bool checkroombits(size_t s) {
 		size_t counter = 0; 
-
+		for (int i = 0; i < totalsizeui; i++) {
 			for (int j = 0; j < 63; j++) {
 
 				if (counter == s) {
-					return true; 
+					return true;
 
 				}
-				if (bits[num] >> j && 1 == 0) {
-					counter = counter + 1; 
+				if (bits[i] >> j && 1 == 0) {
+					counter = counter + 1;
 
 
 				}
 				else {
-					counter = 0; 
+					counter = 0;
 
 				}
-			
-			
+
+
 			}
 
-	
+		}
 		return false; 
 
 	}
 
 	///Change the values in the bitmap to reflect that the proper memory has been allocated
-	void allocateptr(size_t s, size_t pos,int ptrnum) 
+	void allocateptr(size_t s, size_t pos,int startcha, int endcha) 
 	{
+
+
 		size_t temp = pos + s; 
-		for (size_t i = pos; i < temp; i++) {
-			bits[ptrnum] &= 1 << n;
-		}
+	
+		//Fill the first pointer
+		for (int j = startcha; j < endcha; j++) {
+
+
+
+			//fill the rest
+			for (size_t i = pos; i < temp; i++) {
+				bits[j] &= 1 << i;
 		
+			
+			}
+		}
 
 	}
 
@@ -172,6 +184,9 @@ public:
 
 	///Give the Persistent Arena Manager the Position of the array that can allocate a number of blocks IE if there is size 5 left Allocate Size 5
 	size_t poschunk(size_t s) {
+
+
+
 		//Loop through the list
 		//Find the number of bits 
 		//Return its position to the Persistent Arena Manager
