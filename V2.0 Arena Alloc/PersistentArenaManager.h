@@ -96,48 +96,40 @@ public:
 
 
 
-	///See if there is room in the bit map that can be allocated
+	///See if there is room in the bit map that can be allocated'
+	///This will loop through the overall char * chunks knowing that each position corresponds to 1 byte
+	///We then find the sequential number of bytes that we need to allocate then we return if that number of bytes is able to be allocated
+	/// Or false that we do not have enough rooom in chunk 
 	bool checkroomchunks(size_t s) {
 		size_t counter = 0; 
 
 		for (int i = 0; i < totalsize; i++) {
-				
 			for (int j = i; j < totalsize; j++) {
 				if (counter == s) {
 					return true; 
 				}
-				
 				if (chunks[j] == 0) {
 					counter = counter + 1; 
-
-
-
 				}
 				else {
 					counter = 0; 
 					break;
 				}
-
-
 			}
-
-
-
 		}
 		return false; 
-		//for(int i = 0; i < chunks)
 	}
-
-	bool checkroombits(size_t s) {
+	///Take in a size and a number in the array pointer then we check i
+	bool checkroombits(size_t s,int num) {
 		size_t counter = 0; 
-		for (int i = 0; i < totalsizeui; i++) {
+
 			for (int j = 0; j < 63; j++) {
 
 				if (counter == s) {
 					return true; 
 
 				}
-				if (bits[i] >> j && 1 == 0) {
+				if (bits[num] >> j && 1 == 0) {
 					counter = counter + 1; 
 
 
@@ -150,13 +142,13 @@ public:
 			
 			}
 
-		}
+	
 		return false; 
 
 	}
 
 	///Change the values in the bitmap to reflect that the proper memory has been allocated
-	void allocate(size_t s, size_t pos,int ptrnum) 
+	void allocateptr(size_t s, size_t pos,int ptrnum) 
 	{
 		size_t temp = pos + s; 
 		for (size_t i = pos; i < temp; i++) {
@@ -166,12 +158,30 @@ public:
 
 	}
 
+	void allocatechu(size_t s, size_t pos) {
+		size_t temp = s = pos; 
+		for (size_t i = pos; i < temp; i++) {
+			chunks[i] = 1; 
+
+
+
+		}
+
+
+	}
+
 	///Give the Persistent Arena Manager the Position of the array that can allocate a number of blocks IE if there is size 5 left Allocate Size 5
-	size_t pos(size_t s) {
+	size_t poschunk(size_t s) {
 		//Loop through the list
 		//Find the number of bits 
 		//Return its position to the Persistent Arena Manager
 		//Change the Bit map 
+
+
+	}
+
+	size_t posptr(size_t s, int ptrar) {
+
 
 
 	}
