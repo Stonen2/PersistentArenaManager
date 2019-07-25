@@ -294,6 +294,18 @@ public:
 	///The following is a series of functions that will be used for the linked list structure to hold arenas
 	Arena<s, ps>* tail;
 
+	linked() {
+		head = NULL;
+		temp = NULL; 
+		tail = NULL;
+
+
+
+	}
+	~linked() {
+
+	}
+	
 	bool isEmpty()
 	{
 		return head == NULL;
@@ -497,6 +509,18 @@ private:
 	///Stop Linked List
 public:
 
+	PersistentArenaManager() {
+		s = NULL; 
+		s1 = NULL; 
+		s2 = NULL; 
+
+
+	}
+	~PersistentArenaManager() {
+
+	}
+	//PersistentArenaManager(const PersistentArenaManager&) = default;
+	//PersistentArenaManager& operator=(const PersistentArenaManager&) = default;
 
 	/// [nas] Rename from superultra to PersistentArenaManager
 ///
@@ -519,13 +543,13 @@ public:
 	
 		//linked<64, 64>foo;
 
-
+		linked<64, 64> dick;
 		//4096
 		Arena<64, 64> le = new Arena<64, 64>(inbase);
-		s.insert(le);
+		dick.insert(le);
 		base = inbase;
 		endregion = &inbase + inoffset;
-		s.display();
+		dick.display();
 	}
 	/// - destroy(): currently a no-op, but part of the API in case we ever decide that init() 
 ///   should be responsible for calling mmap... in that case, destroy() would call munmap()
