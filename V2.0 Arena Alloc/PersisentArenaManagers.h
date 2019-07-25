@@ -287,6 +287,7 @@ template <int s, int ps>
 
 class linked {
 public: 
+	double count = .00; 
 	Arena<s, ps>* head;
 	Arena<s, ps>* temp;
 
@@ -298,8 +299,8 @@ public:
 		head = NULL;
 		temp = NULL; 
 		tail = NULL;
-
-
+		//count = 10; 
+		count = count + .00001;
 
 	}
 	~linked() {
@@ -510,9 +511,9 @@ private:
 public:
 
 	PersistentArenaManager() {
-		s = NULL; 
-		s1 = NULL; 
-		s2 = NULL; 
+		//s = NULL; 
+		//s1 = NULL; 
+		//s2 = NULL; 
 
 
 	}
@@ -543,13 +544,12 @@ public:
 	
 		//linked<64, 64>foo;
 
-		linked<64, 64> dick;
 		//4096
-		Arena<64, 64> le = new Arena<64, 64>(inbase);
-		dick.insert(le);
+		//Arena<64, 64> le(inbase);
+		//s.insert(le);
 		base = inbase;
 		endregion = &inbase + inoffset;
-		dick.display();
+		//s.display();
 	}
 	/// - destroy(): currently a no-op, but part of the API in case we ever decide that init() 
 ///   should be responsible for calling mmap... in that case, destroy() would call munmap()
