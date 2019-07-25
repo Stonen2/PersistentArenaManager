@@ -394,6 +394,11 @@ private:
 		//No Op
 	}
 
+	size_type malloc(size_type s) {
+
+
+	}
+
 	//Round to the nearest 64th 
 	size_type pad(size_type s) {
 		size_type temporary = s; 
@@ -441,11 +446,40 @@ public:
 	/// - get_mem(size_t): rounds the given size up to the next size class, finds (or creates)
 	///   an arena that has a free block of that size, and reserves / returns that block
 	void_star get_mem(size_type size) {
-		//List is empty 
-		if (head == NULL) {
-			//Create a New Arena}
+		//List is empty
+		bool alloc = false; 
+		bool room = false; 
+		while (alloc == false) {
+			if (head == NULL) {
+				//Create a New Arena}
+				Arena <64, 64> s = new Arena<64, 64>(s);
+
+				insert(s);
 
 
+			}
+			else if(room == false){
+				Arena <64, 64> s = new Arena <64, 64>(s);
+				insert(s);
+			}
+			else {
+				Arena* temp = Head_Arena;
+				while (temp != NULL) {
+					void_star store = hub(temp, needbig);
+					if (store == NULL) {
+						//Failed
+						temp = temp->next;
+					}
+					else {
+						return store;
+						//Success!
+					}
+				}
+
+			}
+
+
+		}
 	}
 
 
@@ -453,6 +487,8 @@ public:
 	/// - return_mem(void*): Determines the arena from which the provided pointer was allocated,
 ///   and returns that pointer to the arena.
 	void_star return_mem(void_star findarena) {
+		BaseArena* s = (BaseArena)findarena; 
+		return s; 
 
 
 	}
