@@ -286,7 +286,7 @@ public:
 template <int s, int ps> 
 
 class linked {
-
+public: 
 	Arena<s, ps>* head;
 	Arena<s, ps>* temp;
 
@@ -413,13 +413,13 @@ private:
 	///The offset to the next part of te region that is ready to be allocated
 	size_type NextFree;
 	//
-	linked<64,64> *s = new linked<64, 64>();
-	linked<64, 128>* s1 = new linked<64, 128>();
-	linked<64, 256>* s2 = new linked<64, 256>();
-	linked<64, 512> *s3 = new linked<64, 512>();
-	linked<64, 1024>* s4 = new linked<64, 1024>();
-	linked<64, 2048>* s5 = new linked<64, 2048>();
-	linked<64, 4096>* s6 = new linked<64, 4096>();
+	linked<64,64> s;
+	linked<64, 128> s1;
+	linked<64, 256> s2;
+	linked<64, 512>s3;
+	linked<64, 1024> s4;
+	linked<64, 2048> s5;
+	linked<64, 4096> s6;
 
 	void mmap() {
 
@@ -517,7 +517,7 @@ public:
 	void init(void_star inbase, size_type inoffset) {
 		//To start
 	
-
+		//linked<64, 64>foo;
 
 
 		//4096
