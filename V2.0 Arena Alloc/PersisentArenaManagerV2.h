@@ -38,6 +38,7 @@ class BaseArena {
 	void* startar;
 	///The total number of bits that are remainning... NOT IN ONE CONTINUATION!
 	int numleft;
+	void* endpos; 
 
 	///We want to set the total number of bits for a given base arena
 	void setnumbits(int innumbits) {
@@ -55,6 +56,13 @@ class BaseArena {
 	void setnumleft(int innumleft) {
 		numleft = innumleft;
 	}
+	void setendst(void * inendstar) {
+		endpos = inendstar; 
+	}
+	void* getendpos() {
+		return endpos; 
+	}
+
 	///This will return the number of bits remainning to be allocated
 	int getnumleft() {
 		return numleft;
@@ -98,9 +106,13 @@ public:
 		BaseArena::setstar(instart);
 		BaseArena::setnumbits(NUMBITS);
 		BaseArena::setnumleft(NUMBITS);
+		BaseArena::setendst((&instart + chunksize));
 	}
 
+	void* getend() {
 
+		return BaseArena::getendpos;
+	}
 
 	///See if there is room in the bit map that can be allocated'
 	///This will loop through the overall char * chunks knowing that each position corresponds to 1 byte
@@ -405,8 +417,17 @@ private:
 		//No Op
 	}
 
-	size_type malloc(size_type s) {
+	void_star malloc(size_type s) {
+		void_star test = NextFree + s; 
+		NextFree += s; 
+		if (&test > &endregion) {
+			cout << "No More room to allocate";
+			return NULL;
+		}
+		else {
+			return test; 
 
+		}
 
 	}
 
@@ -444,6 +465,21 @@ private:
 		return temporary;
 	}
 
+
+	//This functions goal is to be used to manipulate a void pointer to then be returned to the programmer 
+	//The function will take in the size_t of the position and then it will take the size of the object that needs
+	//to be allocated then it will take in the start of the arena that the object is being allocated too
+	//Then a new void pointer will be created and returned that will be pointing to an object within the 
+	//Range of bits in the given arena
+	void_star lowlevelalloc(size_type posstart, size_type thisbig, void_star arenast) {
+		//Make a new void * pointer that will point to the arena start + the positition of the next free spot in the bit map 
+		// + the overall size that needs to be allocated. 
+		void_star newplace = &arenast + posstart + thisbig;
+		//Return new value 
+		return newplace;
+
+	}
+
 	///Stop Linked List
 public:
 
@@ -479,7 +515,7 @@ public:
 		Arena<64, 64> le = new Arena<64, 64>(inbase);
 		s.insert(le);
 		base = inbase;
-		endregion = inoffset;
+		endregion = &inbase + inoffset;
 
 	}
 	/// - destroy(): currently a no-op, but part of the API in case we ever decide that init() 
@@ -494,26 +530,304 @@ public:
 	///   an arena that has a free block of that size, and reserves / returns that block
 	void_star get_mem(size_type size) {
 		size_type t = pad(size);
-		if (t == 64) {
+		void* test = malloc(size);
+		bool alloc = true; 
 
+		if (t == 64) {
+			while (alloc == false) {
+				if (s.head == NULL) {
+					Arena<64, 64> le = new Arena<64, 64>(test);
+					s.insert(le);
+				}
+				else if (alloc == false) {
+					Arena<64, 64> le = new Arena<64, 64>(test);
+					s.insert(le);
+
+				}
+				else {
+					//Try Allocating
+					Arena<64,64>* temp = s.head;
+					while (temp != NULL) {
+						
+						//void_star store = hub(temp, needbig);
+						if (temp->checkroombits == true && temp->checkroomchunks == true) {
+							temp->allocatechu;
+							temp->allocateptr;
+							size_type st = temp->poschunk;
+							void_star store = lowlevelalloc(size, st, test);
+							if (store > temp->getend()) {
+								//Need More Memory 
+								//alloc == false; 
+								
+							}
+							else {
+								return store; 
+							} 
+						}
+						else {
+							//Need More memory, Allocate some more 
+							//alloc = false; 
+							temp = temp->next; 
+						}
+					}
+					alloc = false; 
+				}
+			}
 
 		}
 		else if (t == 128) {
 
+			while (alloc == false) {
+				if (s1.head == NULL) {
+					Arena<64, 128> le = new Arena<64, 128>(test);
+					s1.insert(le);
+				}
+				else if (alloc == false) {
+					Arena<64, 128> le = new Arena<64, 128>(test);
+					s1.insert(le);
+
+				}
+				else {
+					//Try Allocating
+					Arena<64, 128> * temp = s1.head;
+					while (temp != NULL) {
+
+						//void_star store = hub(temp, needbig);
+						if (temp->checkroombits == true && temp->checkroomchunks == true) {
+							temp->allocatechu;
+							temp->allocateptr;
+							size_type st = temp->poschunk;
+							void_star store = lowlevelalloc(size, st, test);
+							if (store > temp->getend()) {
+								//Need More Memory 
+								//alloc == false;
+							}
+							else {
+								return store;
+							}
+						}
+						else {
+							//Need More memory, Allocate some more 
+							//alloc = false;
+							temp = temp->next; 
+						}
+					}
+					alloc = false; 
+
+				}
+			}
+
+
+
 		}
 		else if (t == 256) {
+			while (alloc == false) {
+				if (s2.head == NULL) {
+					Arena<64, 256> le = new Arena<64, 256>(test);
+					s2.insert(le);
+				}
+				else if (alloc == false) {
+					Arena<64, 256> le = new Arena<64, 256>(test);
+					s2.insert(le);
+
+				}
+				else {
+					//Try Allocating
+					Arena<64, 256> * temp = s2.head;
+					while (temp != NULL) {
+
+						//void_star store = hub(temp, needbig);
+						if (temp->checkroombits == true && temp->checkroomchunks == true) {
+							temp->allocatechu;
+							temp->allocateptr;
+							size_type st = temp->poschunk;
+							void_star store = lowlevelalloc(size, st, test);
+							if (store > temp->getend()) {
+								//Need More Memory 
+								//alloc == false;
+							}
+							else {
+								return store;
+							}
+						}
+						else {
+							//Need More memory, Allocate some more 
+							//alloc = false;
+							temp = temp->next;
+						}
+					}
+					alloc = false;
+
+				}
+			}
 
 		}
 		else if (t == 512) {
+		while (alloc == false) {
+			if (s3.head == NULL) {
+				Arena<64, 512> le = new Arena<64, 512>(test);
+				s3.insert(le);
+			}
+			else if (alloc == false) {
+				Arena<64, 512> le = new Arena<64, 512>(test);
+				s3.insert(le);
+
+			}
+			else {
+				//Try Allocating
+				Arena<64, 512> * temp = s3.head;
+				while (temp != NULL) {
+
+					//void_star store = hub(temp, needbig);
+					if (temp->checkroombits == true && temp->checkroomchunks == true) {
+						temp->allocatechu;
+						temp->allocateptr;
+						size_type st = temp->poschunk;
+						void_star store = lowlevelalloc(size, st, test);
+						if (store > temp->getend()) {
+							//Need More Memory 
+							//alloc == false;
+						}
+						else {
+							return store;
+						}
+					}
+					else {
+						//Need More memory, Allocate some more 
+						//alloc = false;
+						temp = temp->next;
+					}
+				}
+				alloc = false;
+
+			}
+		}
 
 		}
 		else if (t == 1024) {
+		while (alloc == false) {
+			if (s4.head == NULL) {
+				Arena<64, 1024> le = new Arena<64, 1024>(test);
+				s4.insert(le);
+			}
+			else if (alloc == false) {
+				Arena<64, 1024> le = new Arena<64, 1024>(test);
+				s4.insert(le);
+
+			}
+			else {
+				//Try Allocating
+				Arena<64, 1024> * temp = s4.head;
+				while (temp != NULL) {
+
+					//void_star store = hub(temp, needbig);
+					if (temp->checkroombits == true && temp->checkroomchunks == true) {
+						temp->allocatechu;
+						temp->allocateptr;
+						size_type st = temp->poschunk;
+						void_star store = lowlevelalloc(size, st, test);
+						if (store > temp->getend()) {
+							//Need More Memory 
+							//alloc == false;
+						}
+						else {
+							return store;
+						}
+					}
+					else {
+						//Need More memory, Allocate some more 
+						//alloc = false;
+						temp = temp->next;
+					}
+				}
+				alloc = false;
+
+			}
+		}
 
 		}
 		else if (t == 2048) {
+		while (alloc == false) {
+			if (s5.head == NULL) {
+				Arena<64, 2048> le = new Arena<64, 2048>(test);
+				s5.insert(le);
+			}
+			else if (alloc == false) {
+				Arena<64, 2048> le = new Arena<64, 2048>(test);
+				s5.insert(le);
+
+			}
+			else {
+				//Try Allocating
+				Arena<64, 2048> * temp = s5.head;
+				while (temp != NULL) {
+
+					//void_star store = hub(temp, needbig);
+					if (temp->checkroombits == true && temp->checkroomchunks == true) {
+						temp->allocatechu;
+						temp->allocateptr;
+						size_type st = temp->poschunk;
+						void_star store = lowlevelalloc(size, st, test);
+						if (store > temp->getend()) {
+							//Need More Memory 
+							//alloc == false;
+						}
+						else {
+							return store;
+						}
+					}
+					else {
+						//Need More memory, Allocate some more 
+						//alloc = false;
+						temp = temp->next;
+					}
+				}
+				alloc = false;
+
+			}
+		}
 
 		}
 		else if (t == 4096) {
+			while (alloc == false) {
+				if (s1.head == NULL) {
+					Arena<64, 4096> le = new Arena<64, 4096>(test);
+					s6.insert(le);
+				}
+				else if (alloc == false) {
+					Arena<64, 4096> le = new Arena<64, 4096>(test);
+					s6.insert(le);
+
+				}
+				else {
+					//Try Allocating
+					Arena<64, 4096> * temp = s6.head;
+					while (temp != NULL) {
+
+						//void_star store = hub(temp, needbig);
+						if (temp->checkroombits == true && temp->checkroomchunks == true) {
+							temp->allocatechu;
+							temp->allocateptr;
+							size_type st = temp->poschunk;
+							void_star store = lowlevelalloc(size, st, test);
+							if (store > temp->getend()) {
+								//Need More Memory 
+								//alloc == false;
+							}
+							else {
+								return store;
+							}
+						}
+						else {
+							//Need More memory, Allocate some more 
+							//alloc = false;
+							temp = temp->next;
+						}
+					}
+					alloc = false;
+
+				}
+		}
 
 		}
 		else {
@@ -528,6 +842,9 @@ public:
 	/// - return_mem(void*): Determines the arena from which the provided pointer was allocated,
 ///   and returns that pointer to the arena.
 	void_star return_mem(void_star findarena) {
+		//Search 64
+		//Search 128 
+		//Etc...
 	//Write a function if this void star
 	
 	/*
