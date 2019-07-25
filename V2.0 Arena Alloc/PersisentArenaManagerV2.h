@@ -1,7 +1,5 @@
 #pragma once
 
-
-#pragma once
 #include <iostream>
 #include <cstddef>
 #include <stdlib.h>
@@ -903,13 +901,5 @@ public:
 
 
 	}
-
-
-
-
-
-
-
-
 
 };
