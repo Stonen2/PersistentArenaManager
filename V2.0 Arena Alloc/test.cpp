@@ -17,7 +17,8 @@ int main() {
 	PersistentArenaManager<int> m;
 	void* s = malloc(64);
 	m.init(s,64);
-	
-
+	void* t; 
+	t = m.get_mem(10);
+	cout << t; 
 	return 0;  
 }
