@@ -113,6 +113,10 @@ public:
 
 		return BaseArena::getendpos;
 	}
+	void* getstar() {
+
+		return BaseArena::getstar;
+	}
 
 	///See if there is room in the bit map that can be allocated'
 	///This will loop through the overall char * chunks knowing that each position corresponds to 1 byte
@@ -347,18 +351,22 @@ template <class s,class ps> class linked {
 		}
 	}
 
-	void find(Arena<s, ps> x)
+	Arena<s,ps>*  find(void * s)
 	{
 		int i;
-		for (i = 1, temp = head; temp->next != NULL && temp->data != x; temp = temp->next, i++);
-		if (temp->data == x)
-		{
-			cout << "Found at position:" << i << endl;
+		temp = head; 
+		while (temp != NULL) {
+
+			if (&temp.getstart() >= &s && &s < &temp->getend()) {
+				return temp; 
+			}
+
+			else {
+			temp = temp->next; 
+			}
+
 		}
-		else if (temp->next == NULL)
-		{
-			cout << "Error: Number Not found..." << endl;
-		}
+		return NULL; 
 	}
 
 	void display()
@@ -846,8 +854,48 @@ public:
 		//Search 128 
 		//Etc...
 	//Write a function if this void star
-	
-	/*
+		if (s.find(findarena) == true) {
+			void_star t = s.find(findarena);
+			return t; 
+
+		}
+		else if (s1.find(findarena) == true) {
+			void_star t = s1.find(findarena);
+			return t;
+
+		}
+		else if (s2.find(findarena) == true) {
+			void_star t = s2.find(findarena);
+			return t;
+
+		}
+		else if (s3.find(findarena) == true) {
+			void_star t = s3.find(findarena);
+			return t;
+
+		}
+		else if (s4.find(findarena) == true) {
+			void_star t = s4.find(findarena);
+			return t;
+
+		}
+		else if (s5.find(findarena) == true) {
+			void_star t = s5.find(findarena);
+			return t;
+
+		}
+		else if (s6.find(findarena) == true) {
+			void_star t = s6.find(findarena);
+			return t;
+
+		}
+		else {
+			return NULL; 
+		}
+		
+		
+		
+		/*
 	if findarena > arena.startbase && findarena < arena.endbase{
 	return arena 
 	else next arena 
