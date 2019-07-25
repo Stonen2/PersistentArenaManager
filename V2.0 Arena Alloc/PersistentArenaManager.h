@@ -87,6 +87,8 @@ public:
 	///On creation we want to take in a void * that will be given to us by the malloc returned in the parent program IE Persistent Arena Manager
 	///Then we want to set the Base Arena Meta data that we know from the start of the creation
 	///This is known because the template allows us to know the number of bits that will be available as well as the size of the chunk that has just been allocated
+	///
+	
 	Arena(void * instart) {
 
 		BaseArena::setchunk(CHUNKSIZE);
@@ -184,7 +186,24 @@ public:
 
 	///Give the Persistent Arena Manager the Position of the array that can allocate a number of blocks IE if there is size 5 left Allocate Size 5
 	size_t poschunk(size_t s) {
+		size_t counter = 0;
 
+		for (int i = 0; i < totalsize; i++) {
+			for (int j = i; j < totalsize; j++) {
+				if (counter == s) {
+					
+					allocatechu(s, counter);
+					return counter;
+				}
+				if (chunks[j] == 0) {
+					counter = counter + 1;
+				}
+				else {
+					counter = 0;
+					break;
+				}
+			}
+		}
 
 
 		//Loop through the list
@@ -196,7 +215,49 @@ public:
 	}
 
 	size_t posptr(size_t s, int ptrar) {
+		size_t counter = 0;
+		int startcha = 0; 
+		int endcha = startcha; 
+		bool continues = false; 
+		for (int i = 0; i < totalsizeui; i++) {
+			if (continues == true) {
+				endcha = i;
+				continues = false; 
+			}
+			else {
+				startcha = i;
 
+
+			}
+
+
+			for (int j = 0; j < 63; j++) {
+
+				if (counter == s) {
+					
+					endcha = i; 
+					allocateptr(s, counter, startcha, endcha);
+					return counter;
+
+				}
+				if (bits[i] >> j && 1 == 0) {
+					counter = counter + 1;
+					if (j == 63) {
+						continues = true;
+					 
+					}
+
+				}
+				else {
+					counter = 0;
+					continues = false; 
+					
+				}
+
+
+			}
+			
+		}
 
 
 	}
@@ -323,21 +384,74 @@ private:
 		}
 	}
 
+	void mmap() {
+
+		//No op 
+	}
+
+	void munmap() {
+
+		//No Op
+	}
+
+	//Round to the nearest 64th 
+	size_type pad(size_type s) {
+		size_type temporary = s; 
+
+
+		return temporary; 
+	}
+
 	///Stop Linked List
 public: 
 
-	void init(void_star base, size_type offset) {
+
+	/// [nas] Rename from superultra to PersistentArenaManager
+///
+/// The PersistentArenaManager is a programmer-visible object that provides the ability to
+/// carve out regions from a mmap'd file and use them as if they were the return value from
+/// calls to malloc().  PersistentArenaManager also supports free().
+///
+/// The api consists of four functions:
+
+
+
+
+
+	/// - init(void* base, size_t offset): init() receives a previously mmap'd region of memory 
+///   and its maximum size.  It finds the allocator within that region, initializes this 
+///   PersistentArenaManager from that allocator, and prepares to serve future allocation
+///   and free requests.
+	void init(void_star inbase, size_type inoffset) {
+		//To start
+		Arena<64,64> s = new Arena<64, 64>(inbase);
+		insert(s);
+		base = inbase; 
+		endregion = inoffset; 
 
 	}
-
+	/// - destroy(): currently a no-op, but part of the API in case we ever decide that init() 
+///   should be responsible for calling mmap... in that case, destroy() would call munmap()
 	void destroy() {
 		//No-Op
 	}
 
+
+
+	/// - get_mem(size_t): rounds the given size up to the next size class, finds (or creates)
+	///   an arena that has a free block of that size, and reserves / returns that block
 	void_star get_mem(size_type size) {
+		//List is empty 
+		if (head == NULL) {
+			//Create a New Arena}
+
 
 	}
 
+
+
+	/// - return_mem(void*): Determines the arena from which the provided pointer was allocated,
+///   and returns that pointer to the arena.
 	void_star return_mem(void_star findarena) {
 
 
@@ -345,10 +459,6 @@ public:
 
 
 
-
-	void_star malloc(size_type s) {
-
-	}
 
 
 
