@@ -12,18 +12,18 @@ using namespace std;
 
 #if 0
 
-class BaseArena{
-  // this would have common fields of arenas, such as size?
-  int numbits;
-  int chunksize;
-  // ...
+class BaseArena {
+	// this would have common fields of arenas, such as size?
+	int numbits;
+	int chunksize;
+	// ...
 };
 
 template<int NUMBITS, int CHUNKSIZE>
 class Arena : public BaseArena {
-  // this would have the bitmap, and the logic for atomically setting/clearing bits
-  atomic<uint64_t> bits[NUMBITS/(8*sizeof(uint64_t))];
-  char* chunks[NUMBITS*CHUNKSIZE];
+	// this would have the bitmap, and the logic for atomically setting/clearing bits
+	atomic<uint64_t> bits[NUMBITS / (8 * sizeof(uint64_t))];
+	char* chunks[NUMBITS * CHUNKSIZE];
 };
 #endif
 
@@ -172,13 +172,13 @@ public:
 	}
 
 
-/*
-	This function takes in a given arena and the size of an object that needs to be allocated. Then We search the bit map
-	to the corresponding arena that we take in and check to see if there is enough room to allocate the new object
-	If yes we return else false
-*/
+	/*
+		This function takes in a given arena and the size of an object that needs to be allocated. Then We search the bit map
+		to the corresponding arena that we take in and check to see if there is enough room to allocate the new object
+		If yes we return else false
+	*/
 
-	bool checkroom(Arena * temp, size_type big) {
+	bool checkroom(Arena* temp, size_type big) {
 		//Set a flag and a counter to be false and 0
 		bool flag = false;
 		size_type counter = 0;
@@ -187,7 +187,7 @@ public:
 		for (int i = 0; i <= temp->Arenasize; i++) {
 
 			//This inner loop is to check that there are enough positions in the list in order to allocate 
-			for (int j = i; j <= temp-> Arenasize; j++) {
+			for (int j = i; j <= temp->Arenasize; j++) {
 
 				//If the count is equal to the size of the thing being allocated we have enough room and we can exit the program 
 				if (counter == big) {
@@ -212,7 +212,7 @@ public:
 			counter = 0;
 
 		}
-		cout << "NO ROOM ";
+		//cout << "NO ROOM ";
 		//Traverse whole list and found nothing... Return false NO room to allocate
 		return flag;
 
@@ -226,7 +226,7 @@ public:
 	//////////////////////////////////////////////////////////////////////
 
 /*
-This function takes in an arena and a size that needs to be allocated. Just like the function above this checks the arena bitmap to see 
+This function takes in an arena and a size that needs to be allocated. Just like the function above this checks the arena bitmap to see
 if there is enough room to allocate the new object. If yes we track the position in the bit map that the object will be allocated in order
 to offset the void star in the low level allocation and we set the bit map to be updated with 1s in the proper positions
 Remember that 1 will occur in the sequential number of spots equal to the size of the object
@@ -302,7 +302,7 @@ Remember that 1 will occur in the sequential number of spots equal to the size o
 		}
 		else {
 
-			return NULL; 
+			return NULL;
 		}
 	}
 	//Bitallocate -> individually allocates based on bitmap..
@@ -314,33 +314,33 @@ Remember that 1 will occur in the sequential number of spots equal to the size o
 		while (1) {
 			lock_guard <mutex> lock(mut);
 			//if (mut.try_lock()) {
-				bool memoryallocated = false;
-				//We NEED to allocate memory, Continue until memory is allocated
-				while (memoryallocated == false) {
-					//No Arenas ... Make an arena
-					if (Head_Arena == NULL) {
+			bool memoryallocated = false;
+			//We NEED to allocate memory, Continue until memory is allocated
+			while (memoryallocated == false) {
+				//No Arenas ... Make an arena
+				if (Head_Arena == NULL) {
+					allocate();
+				}
+				else {
+					//Traverse all arenas and find a suitable place
+					Arena* temp = Head_Arena;
+					while (temp != NULL) {
+						void_star store = hub(temp, needbig);
+						if (store == NULL) {
+							//Failed
+							temp = temp->next;
+						}
+						else {
+							return store;
+							//Success!
+						}
+					}
+					//Need another new arena
+					if (memoryallocated == false) {
 						allocate();
 					}
-					else {
-						//Traverse all arenas and find a suitable place
-						Arena* temp = Head_Arena;
-						while (temp != NULL) {
-							void_star store = hub(temp, needbig);
-							if (store == NULL) {
-								//Failed
-								temp = temp->next;
-							}
-							else {
-								return store;
-								//Success!
-							}
-						}
-						//Need another new arena
-						if (memoryallocated == false) {
-							allocate();
-						}
-					}
 				}
+			}
 			//}
 		}
 	}
@@ -351,10 +351,10 @@ Remember that 1 will occur in the sequential number of spots equal to the size o
 		temp->Arenasize = (chunk / 2);
 		//cout << temp->Arenasize; 
 		temp->startarena = temp;
-		temp->bitset = new int[temp ->Arenasize];
+		temp->bitset = new int[temp->Arenasize];
 		// traverse through array and set each element to 0
 		for (int i = 0; i < temp->Arenasize; ++i) {
-		
+
 			temp->bitset[i] = 0;
 		}
 		//Return the updated Arena
@@ -366,58 +366,59 @@ Remember that 1 will occur in the sequential number of spots equal to the size o
 	//This program is the ONLY program that calls malloc and that malloc belongs to an individual arena
 	//Thus meaning that a large allocation should be maintained and kept up by the Arena Struct it belongs too
 	void allocate() {
-		
-			//numallocations += 1; 
-			numarenas = numarenas + 1;
-			//0 Elements;
-			if (Head_Arena == NULL) {
-				Arena* e;
-				e = reinterpret_cast<Arena*>(malloc());
 
-				//Set all of Node values in e; 
-				//SEt head Node to E; 
-				e = arenainfo(e);
-				//SEt Tail Not to HeadNode -> next
-				Head_Arena = e;
-				Head_Arena->next = NULL;
-				start = Head_Arena;
-				/*
-				Call Functions to Establish Node
-				*/
-				//Head Node Now E
-				Next_Arena = Head_Arena->next;
-			}
-			else if (Head_Arena->next == NULL) {
-				//Temp Arena 
-				
-				Arena* te;
-				//Allocate this new temp to be the malloc 
-				te = reinterpret_cast<Arena*>(malloc());
-				//te->startarena = te; 
-				//Set Arena values
-				te = arenainfo(te);
-				//Place it in the list 
-				Head_Arena->next = te;
+		//numallocations += 1; 
+		numarenas = numarenas + 1;
+		//0 Elements;
+		if (Head_Arena == NULL) {
+			Arena* e;
+			e = reinterpret_cast<Arena*>(malloc());
 
-			}
-			else {
-				//Arena* temp; 
-				Arena* he;
-				Next_Arena = Head_Arena;
-				while (Next_Arena->next != NULL) {
-					//Get to the last Node
-					Next_Arena = Next_Arena->next;
-				}
-				//Once at end of list insert new node into list
-				he = reinterpret_cast<Arena*>(malloc());
-				//Set values of the new arena
-				he = arenainfo(he);
-				//Make sure it is in the list 
-				Next_Arena->next = he;
-			}
-			//Function DOne
+			//Set all of Node values in e; 
+			//SEt head Node to E; 
+			e = arenainfo(e);
+			//SEt Tail Not to HeadNode -> next
+			Head_Arena = e;
+			Head_Arena->next = NULL;
+			start = Head_Arena;
+			/*
+			Call Functions to Establish Node
+			*/
+			//Head Node Now E
+			Next_Arena = Head_Arena->next;
 		}
-	
+		else if (Head_Arena->next == NULL) {
+			//Temp Arena 
+
+			Arena* te;
+			//Allocate this new temp to be the malloc 
+			te = reinterpret_cast<Arena*>(malloc());
+			//te->startarena = te; 
+			//Set Arena values
+			te = arenainfo(te);
+			//Place it in the list 
+			Head_Arena->next = te;
+
+		}
+		else {
+			//Arena* temp; 
+			Arena* he;
+			Next_Arena = Head_Arena;
+			while (Next_Arena->next != NULL) {
+				//Get to the last Node
+				Next_Arena = Next_Arena->next;
+			}
+			//Once at end of list insert new node into list
+			he = reinterpret_cast<Arena*>(malloc());
+			//Set values of the new arena
+			he = arenainfo(he);
+			//Make sure it is in the list 
+			Next_Arena->next = he;
+			Next_Arena = Next_Arena->next;
+		}
+		//Function DOne
+	}
+
 	//First block is size 64 byte 
 	//We start with no arenas and wait for the user to request memory before we alloate
 	superultra()
@@ -433,8 +434,8 @@ Remember that 1 will occur in the sequential number of spots equal to the size o
 	//Will wait for further instruction
 	~superultra()
 	{
-	
-		
+
+
 
 
 
@@ -443,7 +444,7 @@ Remember that 1 will occur in the sequential number of spots equal to the size o
 
 	// Frees a bit map in a given arenas
 	void deallocate(void_star a) {
-		free((Arena*) a);
+		free((Arena*)a);
 	}
 
 
@@ -458,10 +459,10 @@ Remember that 1 will occur in the sequential number of spots equal to the size o
 			cout << "Map Looks like this";
 			cout << endl;
 			// traverse through array and print each element
-			cout << endl; 
-			for (int i = temp->Arenasize-1; i >= 0; --i) {
+			cout << endl;
+			for (int i = temp->Arenasize - 1; i >= 0; --i) {
 				cout << temp->bitset[i];
-				
+
 			}
 			cout << endl;
 			temp = temp->next;
@@ -474,7 +475,7 @@ Remember that 1 will occur in the sequential number of spots equal to the size o
 	void free(Arena* e) {
 		// traverse through array and print each element
 		for (int i = 0; i <= e->Arenasize; ++i) {
-			e->bitset[i] =0;
+			e->bitset[i] = 0;
 		}
 	}
 	//Function designed to take in a superultra allocator and reconstruct the bit map 
@@ -484,9 +485,9 @@ Remember that 1 will occur in the sequential number of spots equal to the size o
 		//Then offset with 64 size and then check to see if a Arena exists.
 		//If so THen we have found an old arena!
 		//Else there was no arena in that location
-		void_star test = Head_Arena -> startarena;
-		size_type hit = 64; 
-		void_star lets = &test + hit; 
+		void_star test = Head_Arena->startarena;
+		size_type hit = 64;
+		void_star lets = &test + hit;
 		if (lets == NULL) {
 
 
@@ -495,29 +496,29 @@ Remember that 1 will occur in the sequential number of spots equal to the size o
 
 		}
 		//WE found a node
-		else 
+		else
 		{
 			//Set the hit to be chunk size
 			cout << "We have a Node hit";
-			hit = hit * 2; 
-			
-			bool recover = true; 
+			hit = hit * 2;
+
+			bool recover = true;
 			//Keep finding Nodes and offsetting the chunk value 
 			while (recover == true) {
 				lets = &lets + hit;
-				cout << lets << "THIS VALUE"<< endl;
-				cout << hit; 
-				cout << endl; 
-				cout << endl; 
+				cout << lets << "THIS VALUE" << endl;
+				cout << hit;
+				cout << endl;
+				cout << endl;
 				Arena* st = (Arena*)lets;
-				if (st->bitset  == NULL) {
+				if (st->bitset == NULL) {
 					//No Node
-					recover = false; 
+					recover = false;
 
 				}
 				else {
 					//NODE!
-					hit = hit * 2; 
+					hit = hit * 2;
 					cout << "NODE";
 					//cout << lets; 
 
