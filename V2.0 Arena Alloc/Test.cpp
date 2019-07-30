@@ -4,15 +4,15 @@
 #include <chrono>
 #include <iostream>
 #include <fstream>
-
+#include "implement.h"
 using namespace std; 
-/*s
+
 int main() {
 	auto start = std::chrono::high_resolution_clock::now();
 
 
 
-	superultra<int> s;
+	implement<int> s;
 	
 
 	void * t = s.bitallocate(4);
@@ -79,4 +79,4 @@ int main() {
 
 
 	return 0; 
-}*/
+}
