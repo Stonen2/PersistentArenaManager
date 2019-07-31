@@ -3,7 +3,6 @@
 #include "superultra.h"
 #include <chrono>
 #include <iostream>
-#include <fstream>
 #include "implement.h"
 
 using namespace std;
@@ -15,7 +14,6 @@ int main() {
 	t.allocate();
 	t.allocate();
 	t.allocate();
-
 	t.start = te;
 	auto start = std::chrono::high_resolution_clock::now();
 	t.bitallocate(64);

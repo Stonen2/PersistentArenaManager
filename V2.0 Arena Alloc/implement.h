@@ -239,7 +239,7 @@ Remember that 1 will occur in the sequential number of spots equal to the size o
 		//Flag 2 ensures that there is enough room to allocate
 		bool flag = false;
 		bool flag2 = false;
-		while (flag == false) {
+
 			for (int i = 0; i <= e->Arenasize; i++) {
 				positionchanging = i;
 				for (int j = positionchanging; j <= e->Arenasize; j++) {
@@ -266,12 +266,14 @@ Remember that 1 will occur in the sequential number of spots equal to the size o
 				}
 				counter = 0;
 			}
-		}
+		
+		
 		//Never found enough room 
 		if (flag2 == false) {
 
 			positionchanging = -1;
-
+			//cout << "-1";
+			return positionchanging; 
 		}
 
 		//Loop through and change the correct spots in the array to be 1s
@@ -294,10 +296,12 @@ Remember that 1 will occur in the sequential number of spots equal to the size o
 	void_star hub(Arena* e, size_type needbig) {
 
 
-		if (checkroom(e, needbig) == true) {
+
 			size_type s = changeset(needbig, e);
-			return lowlevelalloc(s, needbig, e->startarena);
-		}
+			//cout << s << endl; 
+			if (s != -1) {
+				return lowlevelalloc(s, needbig, e->startarena);
+			}
 		else {
 
 			return NULL;
@@ -323,6 +327,7 @@ Remember that 1 will occur in the sequential number of spots equal to the size o
 					Arena* temp = Head_Arena;
 					while (temp != NULL) {
 						void_star store = hub(temp, needbig);
+						//cout << store << endl; 
 						if (store == NULL) {
 							//Failed
 							temp = temp->next;
