@@ -3,6 +3,7 @@
 #include<chrono>
 using namespace std; 
 
+/*
 int main() {
 	void* te = malloc(1000000);
 	auto start = std::chrono::high_resolution_clock::now();
@@ -28,4 +29,4 @@ int main() {
 
 
 	return 0;
-}
+}*/

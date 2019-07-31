@@ -5,9 +5,7 @@
 #include <stdlib.h>
 #include <atomic>
 #include <cstdint>
-#include <bitset>
-#include <thread>
-#include <mutex>
+
 using namespace std;
 
 #if 0
@@ -311,8 +309,7 @@ Remember that 1 will occur in the sequential number of spots equal to the size o
 	//Then we allocate a new arena and make sure the arena is in the linked list
 	//We then make sure that the arena has enough room to allocate the given memory that has been input by the programmer
 	void_star bitallocate(size_type needbig) {
-		while (1) {
-			lock_guard <mutex> lock(mut);
+
 			//if (mut.try_lock()) {
 			bool memoryallocated = false;
 			//We NEED to allocate memory, Continue until memory is allocated
@@ -340,7 +337,7 @@ Remember that 1 will occur in the sequential number of spots equal to the size o
 						allocate();
 					}
 				}
-			}
+			
 			//}
 		}
 	}

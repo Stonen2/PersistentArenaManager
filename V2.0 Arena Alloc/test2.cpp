@@ -10,34 +10,30 @@ using namespace std;
 
 int main() {
 	void* te = malloc(1000000);
-	auto start = std::chrono::high_resolution_clock::now();
-
 
 	implement<int> t;
-	t.start = te; 
+	t.allocate();
+	t.allocate();
+	t.allocate();
 
-	
+	t.start = te;
+	auto start = std::chrono::high_resolution_clock::now();
 	t.bitallocate(64);
 	t.bitallocate(64);
 	t.bitallocate(64);
 	t.bitallocate(64);
 	t.bitallocate(64);
-	
-
-
 	auto finish = std::chrono::high_resolution_clock::now();
 
 	std::chrono::duration<double> elapsed = finish - start;
 
 
 	std::cout << "Elapsed time: " << elapsed.count() << " s\n";
+	cout << endl; 
+	
 	//cout << elapsed.count();
 	
-	ofstream myfile;
-	myfile.open("PersistentResults2.txt", std::ios_base::app);
-	myfile << "Elapsed Time \n" << elapsed.count() << endl;
-	myfile.close();
-	
+
 
 	return 0;
 }

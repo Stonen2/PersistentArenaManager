@@ -6,14 +6,14 @@
 #include <fstream>
 #include "implement.h"
 using namespace std; 
-
+/*
 int main() {
-	auto start = std::chrono::high_resolution_clock::now();
+	
 
 
 
 	implement<int> s;
-	
+	auto start = std::chrono::high_resolution_clock::now();
 
 	void * t = s.bitallocate(4);
 	void* tt = s.bitallocate(4);
@@ -72,11 +72,7 @@ int main() {
 	std::cout << "Elapsed time: " << elapsed.count() << " s\n";
 	//cout << elapsed.count();
 
-	ofstream myfile;
-	myfile.open("PersistentResults.txt", std::ios_base::app);
-	myfile << "Elapsed Time \n" << elapsed.count() << endl;
-	myfile.close();
 
 
 	return 0; 
-}
+}*/
