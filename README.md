@@ -55,3 +55,5 @@ It is important to understand that the number of bytes that a given bit maps too
 Currently the Arena Data Structure needs to be rebuilt in order for proper free lists to operate
 
 # Tests
+
+Proper tests are still being looked into at the moment
