@@ -25,14 +25,14 @@ The allocator is broken down into three main levels of abstraction
  The lowest level of abstraction is the arena level of the allocator. The functionality of this level is to perform and create a data structure to operate and maintain the arena level of the allocation. This means that this level of the allocator for our allocator is the level that will hold the bitmap as well as several other non-important pieces of metadata that allow for a list data structure to be created. Once again, the goal of this level of the allocator is to allow the overall program to keep creating and sectioning off arenas while the arenas are able to individually allocate memory to a program. This means that a programmer might want to allocate several 4-byte sized data types in the program. By allowing arenas to perform this action then you can stop bottlenecks from forming and allow for more operations to get done concurrently. The algorithm for the arena level is that as of iteration 1 each bit in the bit map can map to 1 byte of data. The arena is responsible for searching the list and then making sure that there is enough room for a data object of the size given can be allocated in a given arena. This is also responsible for returning what the location of where the object will be stored will go. The free functions take in an arena and then sets all of the bits in the bit maps and resets them to be 0 or in the state that they are ready to be allocated. The arena allocating level is only responsible for traversing free lists or lists of arenas and then calling the arenas to create and add a new arena to a free list.
 
 Remember that the following Free List could Exist
->64
->128
->256
->512
->1024
->2048
->4096
->The Size of the Object * 2
+* 64
+* 128
+* 256
+* 512
+* 1024
+* 2048
+* 4096
+* The Size of the Object * 2
 
 
 
