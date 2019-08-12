@@ -26,6 +26,11 @@
 //Malloc Then Takes in a Size 
 //Malloc then Calls Find List. 
 // Traverses the List 
+//So The overall program will need a Void * Start location 
+//A Size_T of the overall Size of the program
+//It will need a Series of Lists 
+//Malloc Function 
+//
 
 
 /// - init(void* base, size_t offset): init() receives a previously mmap'd region of memory
@@ -46,3 +51,48 @@
 
 //If the Void * is in between the range of the starting Void * in a given arena and the ending void * then we have the arena and then return
 //The pointer to the given Arena --> Dont know how this is useful but ok 
+
+using size_type = size_t; 
+
+
+
+class TheAllocator {
+private: 
+
+	void* start;
+	size_type TotalSize; 
+	void* end; 
+
+
+
+	void* malloc(size_type t) {
+
+
+
+	}
+	size_type pad(size_type t) {
+
+
+	}
+
+public: 
+
+
+
+
+	void init(void* base, size_type offset) {
+		start = base;
+		TotalSize = offset;
+		end = &base + offset;
+	}
+
+
+
+
+
+
+
+
+
+
+};
