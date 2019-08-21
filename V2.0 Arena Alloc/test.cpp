@@ -155,7 +155,15 @@ int main() {
 	cout << "WE ALLOCATED";
 	cout << endl; 
 	cout << endl; 
+	cout << endl; 
+	cout << endl;
 
+	void* ttt = a.allocate(4);
+	cout << ttt; 
+
+	void* naughty = a.allocate(70);
+	cout << endl; 
+	cout << naughty; 
 
 
 	//cout << a.map;

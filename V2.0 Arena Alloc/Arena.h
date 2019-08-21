@@ -14,12 +14,17 @@ class Arena {
 
 private: 
 	//Each Arena will have the Following
-
+	//A starting Location
 	void* start; 
+	//The overall Size of the Arena... Usually a Multiple of 64
 	size_type ArenaSize; 
+	//And Ending Location to Make sure it does not exceed these or to Make sure there is enough room to be allocated
 	void* end; 
-	int Numbits; 
+	//Temporarily Not in use
+	int Numbitsalloc; 
+	//The number of Bytes that each Bit maps too
 	int BytestoBit; 
+	//Only need 1 Uint 64 Bit ptr since we are making the number of bytes each bit maps too dynamic
 	atomic_uint64_t map;
 	
 	//int mapsize; 
@@ -36,16 +41,21 @@ public:
 	Arena(void* istart,size_type s) {
 
 
+		//Set the Starting Location
 		start = istart; 
+		//Set the Overall Arena Size
 		ArenaSize = s; 
+		//Set the Ending Location to be the Starting Location + the overall size
 		end = &start + s; 
 		 
-		//All Arenas map 1 bit to 32 Bytes
+		//All Arenas map to a Dynamic amount of Bits to Bytes. We pass in the size of the Arena then we divide it by 64 or the number of bits in the pointer
+
 		int N= numbyte(s); 
 		
 		BytestoBit = 1 << N;
 		BytestoBit = N;
 		map = 1; 
+		Numbitsalloc = 0; 
 	}
 
 	int numbyte(size_type s) {
@@ -85,48 +95,27 @@ public:
 		int bits = decrypt(s);
 		 
 
-		int cnt = 0;
-	
-		//Now We look at all 0s
-		int pos = cnt; 
+		
 		int nu = 0; 
 		int nup = 0; 
+		int temp = Numbitsalloc;
 		bool got = false;
-		if (map == 0) {
+		if (((map << bits) & 1) == 0) {
 			got = true;
-			for (int i = 0; i < nu; i++) {
-				map = map >> 1;
+			Numbitsalloc += bits; 
+			if (Numbitsalloc > 64) {
+				Numbitsalloc = temp; 
+				return NULL; 
 			}
-			void* temp = &start + (BytestoBit * (pos + nup));
-			
+			for (int i = 0; i < bits; i++) {
+				map = map << 1;
+			}
+			void* temp = &start + (BytestoBit * ( Numbitsalloc));
 			return temp;
-		}
-		while ((map & 1) == 1){
-		
-			nu++;
-			map = map >> 1; 
-
-
-			if (nu == bits) {
-				nup = nu; 
-				got = true; 
-				for (int i = 0; i < nu; i++) {
-					map = map << 1; 
-				}
-				void* temp = &start + (BytestoBit * (pos + nup));
-				
-				return temp;
-
-			}
-
-			
-
 		}
 		if (got == false) {
 			return NULL;
 		}
-
-
 	}
 
 
