@@ -67,6 +67,7 @@ private:
 	void* start;
 	size_type TotalSize; 
 	void* end; 
+	size_type sizeleft; 
 
 
 
@@ -114,12 +115,68 @@ public:
 		start = base;
 		TotalSize = offset;
 		end = &base + offset;
+		sizeleft = offset; 
+		//Create a series of Arenas
+		if (sizeleft < 64) {
+
+			cout << "insufficient ROom To allocate Any Arena";
+			throw(1);
+		}
+		if (sizeleft > 64) {
+			Arena*a = new Arena((&base + 64),64);
+			//Add a to the 64 Free List
+			sizeleft = sizeleft - 64; 
+
+		}
+		if (sizeleft > 128) {
+			Arena* a = new Arena((&base + 128), 128);
+			//Add a to the 64 Free List
+			sizeleft = sizeleft - 128;
+		}
+		if (sizeleft > 256) {
+			Arena* a = new Arena((&base + 256), 256);
+			//Add a to the 64 Free List
+			sizeleft = sizeleft - 256;
+		}
+		if (sizeleft > 512) {
+			Arena* a = new Arena((&base + 512), 512);
+			//Add a to the 64 Free List
+			sizeleft = sizeleft - 512;
+		}
+		if (sizeleft > 1024) {
+			Arena* a = new Arena((&base + 1024), 1024);
+			//Add a to the 64 Free List
+			sizeleft = sizeleft - 1024;
+		}
+		if (sizeleft > 2048) {
+			Arena* a = new Arena((&base + 2048), 2048);
+			//Add a to the 64 Free List
+			sizeleft = sizeleft - 2048;
+		}
+		if (sizeleft > 4096) {
+			Arena* a = new Arena((&base + 4096), 4096);
+			//Add a to the 64 Free List
+			sizeleft = sizeleft - 4096;
+		}
+
+		//End Arena Creation
 
 	}
 	void* getmem(size_type s) {
 		size_type findring = pad(s);
 		if (findring == 64) {
 			//ALgorithm for 64
+			//Search 64
+			//Search 128
+			//Search 256
+			//Search 512
+			//Search 1024
+			//Search 2048 
+			//Search 4096
+			//Seach Mega
+			//Make New Node 64
+			//Make New Arena 128...
+
 		}
 		else if (findring == 128) {
 
